@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "Browser Message Responder",
+  "description": "Manually triggered hook to process browser messages from the AI Visual Dev Tool",
+  "version": "1.0.0",
+  "when": {
+    "type": "manual"
+  },
+  "then": {
+    "type": "askAgent",
+    "userInput": "Read the latest browser message from .kiro/browser-messages/incoming.json and respond to it as if the user sent it directly to you. Extract the message content and provide an appropriate response. Also append the processed message to .kiro/browser-messages/browser-messages.json for logging."
+  }
+}

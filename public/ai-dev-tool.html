@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kiro AI Visual Dev Tool</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8f9fa;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .toolbar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1000;
+        }
+
+        .toolbar h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .toolbar-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .btn-primary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .main-container {
+            display: flex;
+            height: calc(100vh - 70px);
+        }
+
+        .sidebar {
+            width: 300px;
+            background: white;
+            border-right: 1px solid #e9ecef;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .sidebar-section {
+            padding: 20px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .sidebar-section h3 {
+            margin-bottom: 15px;
+            color: #495057;
+            font-size: 1.1rem;
+        }
+
+        .element-info {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .element-info.active {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .element-tag {
+            font-weight: 600;
+            color: #667eea;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .element-text {
+            color: #6c757d;
+            font-size: 13px;
+            margin-bottom: 8px;
+            max-height: 60px;
+            overflow: hidden;
+        }
+
+        .element-classes {
+            font-size: 12px;
+            color: #868e96;
+            font-family: 'Monaco', 'Menlo', monospace;
+        }
+
+        .prompt-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .prompt-textarea {
+            flex: 1;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            font-family: inherit;
+            font-size: 14px;
+            resize: none;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .prompt-textarea:focus {
+            border-color: #667eea;
+        }
+
+        .prompt-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            justify-content: flex-end;
+        }
+
+        .content-area {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .iframe-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .target-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .highlight {
+            position: absolute;
+            border: 2px solid #667eea;
+            background: rgba(102, 126, 234, 0.1);
+            pointer-events: none;
+            transition: all 0.2s;
+        }
+
+        .url-input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 14px;
+        }
+
+        .url-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-connected { background: #28a745; }
+        .status-disconnected { background: #dc3545; }
+        .status-connecting { background: #ffc107; }
+
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #6c757d;
+            font-size: 18px;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                height: 300px;
+            }
+            
+            .toolbar-controls {
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="toolbar">
+        <h1>🎯 Kiro AI Visual Dev Tool</h1>
+        <div class="toolbar-controls">
+            <input type="url" class="url-input" id="url-input" placeholder="Enter URL to analyze..." value="https://example.com">
+            <button class="btn btn-primary" onclick="loadPage()">Load Page</button>
+            <button class="btn btn-primary" onclick="toggleInspector()" id="inspector-btn">Start Inspector</button>
+            <span class="status-indicator status-disconnected" id="status-indicator"></span>
+            <span id="status-text">Disconnected</span>
+        </div>
+    </div>
+
+    <div class="main-container">
+        <div class="sidebar">
+            <div class="sidebar-section">
+                <h3>🎯 Selected Element</h3>
+                <div class="element-info" id="selected-element">
+                    <div class="element-tag">No element selected</div>
+                    <div class="element-text">Click on any element in the page to select it</div>
+                </div>
+            </div>
+
+            <div class="sidebar-section prompt-section">
+                <h3>💬 AI Prompt</h3>
+                <textarea 
+                    class="prompt-textarea" 
+                    id="ai-prompt" 
+                    placeholder="Describe what you want to do with the selected element...
+
+Examples:
+• Make this button more prominent
+• Change the color scheme of this section
+• Add hover effects to this card
+• Improve the accessibility of this form
+• Generate similar components
+• Explain how this element works"></textarea>
+                
+                <div class="prompt-actions">
+                    <button class="btn btn-primary" onclick="clearPrompt()">Clear</button>
+                    <button class="btn btn-success" onclick="sendToKiro()" id="send-btn" disabled>Send to Kiro</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-area">
+            <div class="iframe-container">
+                <div class="loading" id="loading">
+                    🌐 Enter a URL and click "Load Page" to start analyzing
+                </div>
+                <iframe class="target-iframe" id="target-iframe" style="display: none;"></iframe>
+                <div class="overlay" id="overlay"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class KiroAIVisualDevTool {
+            constructor() {
+                this.isInspecting = false;
+                this.selectedElement = null;
+                this.iframe = document.getElementById('target-iframe');
+                this.overlay = document.getElementById('overlay');
+                this.currentHighlight = null;
+                this.mcpServerUrl = 'http://localhost:3001';
+                
+                this.initializeEventListeners();
+                this.checkConnection();
+            }
+
+            initializeEventListeners() {
+                // URL input enter key
+                document.getElementById('url-input').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        this.loadPage();
+                    }
+                });
+
+                // Iframe load event
+                this.iframe.addEventListener('load', () => {
+                    this.onIframeLoad();
+                });
+
+                // Prompt textarea changes
+                document.getElementById('ai-prompt').addEventListener('input', () => {
+                    this.updateSendButton();
+                });
+            }
+
+            async checkConnection() {
+                const statusIndicator = document.getElementById('status-indicator');
+                const statusText = document.getElementById('status-text');
+                
+                try {
+                    statusIndicator.className = 'status-indicator status-connecting';
+                    statusText.textContent = 'Connecting...';
+                    
+                    const response = await fetch(`${this.mcpServerUrl}/status`);
+                    if (response.ok) {
+                        statusIndicator.className = 'status-indicator status-connected';
+                        statusText.textContent = 'Connected';
+                    } else {
+                        throw new Error('Server not responding');
+                    }
+                } catch (error) {
+                    statusIndicator.className = 'status-indicator status-disconnected';
+                    statusText.textContent = 'Disconnected';
+                }
+            }
+
+            loadPage() {
+                const url = document.getElementById('url-input').value;
+                if (!url) return;
+
+                const loading = document.getElementById('loading');
+                loading.style.display = 'flex';
+                loading.textContent = '🔄 Loading page...';
+                
+                this.iframe.style.display = 'none';
+                this.iframe.src = url;
+            }
+
+            onIframeLoad() {
+                const loading = document.getElementById('loading');
+                loading.style.display = 'none';
+                this.iframe.style.display = 'block';
+                
+                try {
+                    // Try to access iframe content (will fail for cross-origin)
+                    const iframeDoc = this.iframe.contentDocument || this.iframe.contentWindow.document;
+                    this.setupElementInspection(iframeDoc);
+                } catch (error) {
+                    console.warn('Cross-origin iframe detected. Limited functionality available.');
+                    this.showCrossOriginWarning();
+                }
+            }
+
+            showCrossOriginWarning() {
+                const selectedElement = document.getElementById('selected-element');
+                selectedElement.innerHTML = `
+                    <div class="element-tag">⚠️ Cross-Origin Limitation</div>
+                    <div class="element-text">This page is from a different domain. Element selection is limited for security reasons. You can still send general prompts about the page.</div>
+                `;
+            }
+
+            setupElementInspection(doc) {
+                if (!doc) return;
+
+                // Add click listeners to all elements
+                const elements = doc.querySelectorAll('*');
+                elements.forEach(element => {
+                    element.addEventListener('click', (e) => {
+                        if (this.isInspecting) {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            this.selectElement(element);
+                        }
+                    });
+
+                    element.addEventListener('mouseover', (e) => {
+                        if (this.isInspecting) {
+                            e.stopPropagation();
+                            this.highlightElement(element);
+                        }
+                    });
+                });
+            }
+
+            toggleInspector() {
+                this.isInspecting = !this.isInspecting;
+                const btn = document.getElementById('inspector-btn');
+                
+                if (this.isInspecting) {
+                    btn.textContent = 'Stop Inspector';
+                    btn.className = 'btn btn-danger';
+                    this.iframe.style.cursor = 'crosshair';
+                } else {
+                    btn.textContent = 'Start Inspector';
+                    btn.className = 'btn btn-primary';
+                    this.iframe.style.cursor = 'default';
+                    this.clearHighlight();
+                }
+            }
+
+            highlightElement(element) {
+                if (!this.isInspecting) return;
+
+                this.clearHighlight();
+                
+                const rect = element.getBoundingClientRect();
+                const iframeRect = this.iframe.getBoundingClientRect();
+                
+                const highlight = document.createElement('div');
+                highlight.className = 'highlight';
+                highlight.style.left = (iframeRect.left + rect.left) + 'px';
+                highlight.style.top = (iframeRect.top + rect.top) + 'px';
+                highlight.style.width = rect.width + 'px';
+                highlight.style.height = rect.height + 'px';
+                
+                this.overlay.appendChild(highlight);
+                this.currentHighlight = highlight;
+            }
+
+            clearHighlight() {
+                if (this.currentHighlight) {
+                    this.currentHighlight.remove();
+                    this.currentHighlight = null;
+                }
+            }
+
+            selectElement(element) {
+                this.selectedElement = element;
+                this.updateSelectedElementInfo(element);
+                this.updateSendButton();
+                this.clearHighlight();
+            }
+
+            updateSelectedElementInfo(element) {
+                const selectedElementDiv = document.getElementById('selected-element');
+                
+                const tagName = element.tagName.toLowerCase();
+                const text = element.textContent?.trim().substring(0, 100) || '';
+                const classes = element.className || '';
+                const id = element.id || '';
+                
+                selectedElementDiv.innerHTML = `
+                    <div class="element-tag">&lt;${tagName}${id ? ` id="${id}"` : ''}&gt;</div>
+                    <div class="element-text">${text}${text.length > 100 ? '...' : ''}</div>
+                    <div class="element-classes">${classes ? `class="${classes}"` : 'No classes'}</div>
+                `;
+                selectedElementDiv.className = 'element-info active';
+            }
+
+            updateSendButton() {
+                const sendBtn = document.getElementById('send-btn');
+                const prompt = document.getElementById('ai-prompt').value.trim();
+                
+                sendBtn.disabled = !prompt;
+            }
+
+            clearPrompt() {
+                document.getElementById('ai-prompt').value = '';
+                this.updateSendButton();
+            }
+
+            async sendToKiro() {
+                const prompt = document.getElementById('ai-prompt').value.trim();
+                if (!prompt) return;
+
+                const sendBtn = document.getElementById('send-btn');
+                const originalText = sendBtn.textContent;
+                sendBtn.disabled = true;
+                sendBtn.textContent = 'Sending...';
+
+                try {
+                    const elementContext = this.selectedElement ? {
+                        tagName: this.selectedElement.tagName.toLowerCase(),
+                        id: this.selectedElement.id || null,
+                        className: this.selectedElement.className || null,
+                        textContent: this.selectedElement.textContent?.trim().substring(0, 200) || null,
+                        innerHTML: this.selectedElement.innerHTML?.substring(0, 500) || null
+                    } : null;
+
+                    const message = {
+                        message: prompt,
+                        source: 'ai-visual-dev-tool',
+                        metadata: {
+                            url: document.getElementById('url-input').value,
+                            userAgent: navigator.userAgent,
+                            selectedElement: elementContext,
+                            timestamp: new Date().toISOString()
+                        }
+                    };
+
+                    const response = await fetch(`${this.mcpServerUrl}/send-message`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(message)
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        // Show success feedback
+                        sendBtn.textContent = '✅ Sent!';
+                        sendBtn.className = 'btn btn-success';
+                        
+                        // Clear the prompt
+                        this.clearPrompt();
+                        
+                        // Show instruction
+                        alert('Message sent to Kiro! Now trigger the "Browser Message Responder" hook in Kiro to see your message.');
+                        
+                        setTimeout(() => {
+                            sendBtn.textContent = originalText;
+                            sendBtn.className = 'btn btn-success';
+                            sendBtn.disabled = false;
+                        }, 2000);
+                    } else {
+                        throw new Error(result.error || 'Failed to send message');
+                    }
+                } catch (error) {
+                    alert(`Failed to send message: ${error.message}`);
+                    sendBtn.textContent = originalText;
+                    sendBtn.disabled = false;
+                }
+            }
+        }
+
+        // Initialize the tool when page loads
+        window.addEventListener('load', () => {
+            new KiroAIVisualDevTool();
+        });
+    </script>
+</body>
+</html>
