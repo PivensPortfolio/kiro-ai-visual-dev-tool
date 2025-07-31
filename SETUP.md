@@ -87,7 +87,7 @@ your-project/
 ### Change Ports
 Edit the port numbers in:
 - `mcp-server.mjs` (line ~200): `const HTTP_PORT = 3001;`
-- `web-server.mjs` (line ~10): `const PORT = 5173;`
+- `web-server.mjs` (line ~10): `const PORT = 5174;`
 
 ### Modify Message Processing
 Edit `.kiro/hooks/browser-message-responder.kiro.hook` to change how messages are processed.
