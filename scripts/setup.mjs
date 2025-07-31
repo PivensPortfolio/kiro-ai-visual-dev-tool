@@ -74,7 +74,7 @@ async function setup() {
     console.log('\\n📋 Next steps:');
     console.log('1. Add MCP server to .kiro/settings/mcp.json');
     console.log('2. Run: npm run start');
-    console.log('3. Open: http://localhost:5173/ai-dev-tool');
+    console.log('3. Open: http://localhost:5174/ai-dev-tool');
 
   } catch (error) {
     console.error('❌ Setup failed:', error);

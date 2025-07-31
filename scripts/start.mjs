@@ -51,8 +51,8 @@ process.on('SIGINT', () => {
 });
 
 console.log('✅ Both servers started!');
-console.log('📱 AI Dev Tool: http://localhost:5173/ai-dev-tool');
-console.log('🧪 MCP Test: http://localhost:5173/mcp-test');
+console.log('📱 AI Dev Tool: http://localhost:5174/ai-dev-tool');
+console.log('🧪 MCP Test: http://localhost:5174/mcp-test');
 console.log('📊 MCP Status: http://localhost:3001/status');
 console.log('');
 console.log('Press Ctrl+C to stop all servers');

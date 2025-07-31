@@ -42,7 +42,7 @@ npm run start
 ```
 
 ### 6. Test It
-1. Open `http://localhost:5173/mcp-test`
+1. Open `http://localhost:5174/mcp-test`
 2. Send a test message
 3. In Kiro, manually trigger "Browser Message Responder" hook
 4. Your message should appear in Kiro chat!
@@ -78,8 +78,8 @@ your-project/
 5. **System** → Logs processed message to history
 
 ### Available Endpoints
-- `http://localhost:5173/` - Main interface
-- `http://localhost:5173/mcp-test` - Testing page
+- `http://localhost:5174/` - Main interface
+- `http://localhost:5174/mcp-test` - Testing page
 - `http://localhost:3001/status` - MCP server status
 
 ## 🔧 Customization
