@@ -14,7 +14,7 @@ This bundle provides:
 2. **Install dependencies**: `npm install` (in the bundle folder)
 3. **Configure MCP**: Add the server to your `.kiro/settings/mcp.json`
 4. **Start the servers**: Run `npm run start`
-5. **Open the tool**: Navigate to `http://localhost:5173/ai-dev-tool`
+5. **Open the tool**: Navigate to `http://localhost:5174/ai-dev-tool`
 
 ## 📁 What's Included
 
@@ -61,7 +61,7 @@ Add this to your project's `.kiro/settings/mcp.json`:
 ## 🎯 Usage
 
 ### 1. AI Visual Dev Tool (Main Interface)
-- Open `http://localhost:5173/ai-dev-tool`
+- Open `http://localhost:5174/ai-dev-tool`
 - Load any webpage in the built-in browser
 - Use the visual inspector to select elements
 - Write AI prompts with full element context
@@ -75,7 +75,7 @@ Add this to your project's `.kiro/settings/mcp.json`:
 5. **Send to Kiro** - AI processes with full context
 
 ### 3. Message Testing
-- Open `http://localhost:5173/mcp-test`
+- Open `http://localhost:5174/mcp-test`
 - Send test messages directly to Kiro
 - Verify the communication pipeline
 
@@ -127,7 +127,7 @@ Browser AI Tool → HTTP POST → MCP Server → .kiro/browser-messages/incoming
 3. Manually trigger the Browser Message Responder hook
 
 ### Web tool not loading?
-1. Check web server is running: `http://localhost:5173`
+1. Check web server is running: `http://localhost:5174`
 2. Verify no port conflicts
 3. Check browser console for errors
 
