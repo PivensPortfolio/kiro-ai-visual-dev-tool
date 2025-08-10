@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -204,6 +205,12 @@
             transition: all 0.2s;
         }
 
+        .persistent-highlight {
+            border: 2px solid #667eea;
+            background: rgba(102, 126, 234, 0.15);
+            box-shadow: 0 0 0 1px rgba(102, 126, 234, 0.3);
+        }
+
         .url-input {
             flex: 1;
             padding: 8px 12px;
@@ -218,6 +225,13 @@
             color: rgba(255, 255, 255, 0.7);
         }
 
+        .url-input option {
+            background: #333;
+            color: white;
+        }
+
+
+
         .status-indicator {
             display: inline-block;
             width: 8px;
@@ -226,9 +240,17 @@
             margin-right: 8px;
         }
 
-        .status-connected { background: #28a745; }
-        .status-disconnected { background: #dc3545; }
-        .status-connecting { background: #ffc107; }
+        .status-connected {
+            background: #28a745;
+        }
+
+        .status-disconnected {
+            background: #dc3545;
+        }
+
+        .status-connecting {
+            background: #ffc107;
+        }
 
         .loading {
             display: flex;
@@ -239,16 +261,1156 @@
             font-size: 18px;
         }
 
+        /* Floating Prompt Interface */
+        .floating-prompt {
+            position: absolute;
+            background: white;
+            border-radius: 16px;
+            box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px 0px;
+            padding: 0;
+            width: 400px;
+            height: 40px;
+            z-index: 2000;
+            display: none;
+            pointer-events: auto;
+        }
+
+        .floating-prompt.show {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 0 12px;
+        }
+
+        .floating-prompt h3 {
+            display: none;
+        }
+
+        .floating-prompt .element-preview {
+            display: none;
+        }
+
+        .spacing-info {
+            font-size: 12px;
+        }
+
+        .spacing-row {
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            align-items: center;
+            margin-bottom: 6px;
+            gap: 8px;
+        }
+
+        .spacing-label {
+            font-weight: 500;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .spacing-values {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .spacing-value-box {
+            position: relative;
+            width: 70px;
+            height: 28px;
+            background: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            flex-shrink: 0;
+        }
+
+        .spacing-input {
+            background: transparent;
+            border: none;
+            outline: none;
+            font-size: 14px;
+            color: #374151;
+            padding: 0;
+            margin-left: 28px;
+            width: auto;
+            min-width: 30px;
+            text-align: left;
+            -moz-appearance: textfield;
+        }
+
+        .spacing-input::-webkit-outer-spin-button,
+        .spacing-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .spacing-input:focus {
+            outline: 1px solid #667eea;
+            outline-offset: -1px;
+        }
+
+        .spacing-icon {
+            position: absolute;
+            left: 6px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            color: #6b7280;
+            pointer-events: none;
+        }
+
+        .spacing-icon svg {
+            width: 100%;
+            height: 100%;
+            fill: currentColor;
+        }
+
+        .style-info {
+            font-size: 12px;
+            padding: 8px 0;
+        }
+
+        .style-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            gap: 12px;
+        }
+
+        .style-label {
+            font-weight: 500;
+            color: #374151;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        .style-input-container {
+            display: flex;
+            align-items: center;
+            background: #f3f4f6;
+            border-radius: 8px;
+            padding: 8px 12px;
+            gap: 8px;
+            flex: 1;
+            max-width: 140px;
+            position: relative;
+        }
+
+        .color-preview {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 1px solid #d1d5db;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+
+        .style-text-input {
+            background: transparent;
+            border: none;
+            outline: none;
+            font-size: 13px;
+            color: #374151;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .style-text-input::placeholder {
+            color: #9ca3af;
+        }
+
+        .style-color-picker {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .dropdown-arrow {
+            color: #6b7280;
+            flex-shrink: 0;
+        }
+
+        .advanced-row {
+            border-top: 1px solid #e5e7eb;
+            padding-top: 12px;
+            margin-top: 8px;
+            margin-bottom: 0;
+        }
+
+        .advanced-arrow {
+            color: #6b7280;
+        }
+
+        .style-row:hover .style-input-container {
+            background: #e5e7eb;
+        }
+
+        .color-preview:hover {
+            transform: scale(1.1);
+            transition: transform 0.1s ease;
+        }
+
+        /* Color Picker Submenu */
+        .color-picker-submenu {
+            position: absolute;
+            top: -10px;
+            left: 100%;
+            margin-left: 8px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            padding: 16px;
+            z-index: 4000;
+            width: 280px;
+            display: none;
+        }
+
+        .color-picker-submenu.show {
+            display: block;
+        }
+
+        .color-picker-tabs {
+            display: flex;
+            background: #f3f4f6;
+            border-radius: 8px;
+            padding: 2px;
+            margin-bottom: 16px;
+        }
+
+        .color-picker-tab {
+            flex: 1;
+            padding: 6px 12px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 500;
+            color: #6b7280;
+            background: transparent;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .color-picker-tab.active {
+            background: white;
+            color: #374151;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .color-palette-section {
+            margin-bottom: 20px;
+        }
+
+        .color-palette-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .color-palette-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 6px;
+            margin-bottom: 6px;
+        }
+
+        .color-palette-item {
+            width: 32px;
+            height: 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            transition: all 0.1s ease;
+        }
+
+        .color-palette-item:hover {
+            transform: scale(1.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .custom-color-section {
+            display: none;
+        }
+
+        .custom-color-section.active {
+            display: block;
+        }
+
+        .custom-color-input {
+            width: 100%;
+            height: 120px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        /* Border Radius Dropdown */
+        .radius-dropdown-container {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .radius-input {
+            cursor: pointer;
+        }
+
+        .radius-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 4000;
+            margin-top: 4px;
+            display: none;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .radius-dropdown.show {
+            display: block;
+        }
+
+        .radius-option {
+            padding: 8px 12px;
+            font-size: 14px;
+            color: #374151;
+            cursor: pointer;
+            border-bottom: 1px solid #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: background-color 0.1s ease;
+        }
+
+        .radius-option:last-child {
+            border-bottom: none;
+        }
+
+        .radius-option:hover {
+            background-color: #f9fafb;
+        }
+
+        .radius-option.selected {
+            background-color: #667eea;
+            color: white;
+        }
+
+        .radius-option-check {
+            width: 16px;
+            height: 16px;
+            opacity: 0;
+        }
+
+        .radius-option.selected .radius-option-check {
+            opacity: 1;
+        }
+
+        /* Font Weight Dropdown */
+        .weight-dropdown-container {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .weight-input {
+            cursor: pointer;
+        }
+
+        .weight-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 4000;
+            margin-top: 4px;
+            display: none;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .weight-dropdown.show {
+            display: block;
+        }
+
+        .weight-option {
+            padding: 8px 12px;
+            font-size: 14px;
+            color: #374151;
+            cursor: pointer;
+            border-bottom: 1px solid #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: background-color 0.1s ease;
+        }
+
+        .weight-option:last-child {
+            border-bottom: none;
+        }
+
+        .weight-option:hover {
+            background-color: #f9fafb;
+        }
+
+        .weight-option.selected {
+            background-color: #667eea;
+            color: white;
+        }
+
+        .weight-option-check {
+            width: 16px;
+            height: 16px;
+            opacity: 0;
+        }
+
+        .weight-option.selected .weight-option-check {
+            opacity: 1;
+        }
+
+        /* Text Align Dropdown */
+        .align-dropdown-container {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .align-input {
+            cursor: pointer;
+        }
+
+        .align-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 4000;
+            margin-top: 4px;
+            display: none;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .align-dropdown.show {
+            display: block;
+        }
+
+        .align-option {
+            padding: 8px 12px;
+            font-size: 14px;
+            color: #374151;
+            cursor: pointer;
+            border-bottom: 1px solid #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: background-color 0.1s ease;
+        }
+
+        .align-option:last-child {
+            border-bottom: none;
+        }
+
+        .align-option:hover {
+            background-color: #f9fafb;
+        }
+
+        .align-option.selected {
+            background-color: #667eea;
+            color: white;
+        }
+
+        .align-option-check {
+            width: 16px;
+            height: 16px;
+            opacity: 0;
+        }
+
+        .align-option.selected .align-option-check {
+            opacity: 1;
+        }
+
+        /* Font Size Dropdown */
+        .size-dropdown-container {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .size-input {
+            cursor: pointer;
+        }
+
+        .size-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 4000;
+            margin-top: 4px;
+            display: none;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+
+        .size-dropdown.show {
+            display: block;
+        }
+
+        .size-option {
+            padding: 8px 12px;
+            font-size: 14px;
+            color: #374151;
+            cursor: pointer;
+            border-bottom: 1px solid #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: background-color 0.1s ease;
+        }
+
+        .size-option:last-child {
+            border-bottom: none;
+        }
+
+        .size-option:hover {
+            background-color: #f9fafb;
+        }
+
+        .size-option.selected {
+            background-color: #667eea;
+            color: white;
+        }
+
+        .size-option-check {
+            width: 16px;
+            height: 16px;
+            opacity: 0;
+        }
+
+        .size-option.selected .size-option-check {
+            opacity: 1;
+        }
+
+        /* CSS Classes Textarea */
+        .classes-textarea-container {
+            width: 100%;
+            padding: 0;
+        }
+
+        .classes-textarea {
+            width: 100%;
+            min-height: 80px;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            background: #f8f9fa;
+            color: #374151;
+            resize: vertical;
+            outline: none;
+            transition: all 0.2s ease;
+            box-sizing: border-box;
+        }
+
+        .classes-textarea:focus {
+            border-color: #667eea;
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .classes-textarea::placeholder {
+            color: #9ca3af;
+            font-style: italic;
+        }
+
+        .classes-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+            justify-content: flex-end;
+        }
+
+        .classes-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+
+
+        /* CSS Class Autocomplete */
+        .classes-textarea-container {
+            position: relative;
+        }
+
+        .class-autocomplete {
+            position: absolute;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            z-index: 5000;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+            min-width: 200px;
+        }
+
+        .class-autocomplete.show {
+            display: block;
+        }
+
+        .autocomplete-header {
+            padding: 8px 12px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 12px;
+            font-weight: 600;
+            color: #6b7280;
+        }
+
+        .autocomplete-option {
+            padding: 8px 12px;
+            font-size: 13px;
+            color: #374151;
+            cursor: pointer;
+            border-bottom: 1px solid #f3f4f6;
+            font-family: 'Monaco', 'Menlo', 'Consolas', monospace;
+            transition: background-color 0.1s ease;
+        }
+
+        .autocomplete-option:last-child {
+            border-bottom: none;
+        }
+
+        .autocomplete-option:hover {
+            background-color: #f9fafb;
+        }
+
+        .autocomplete-option.selected {
+            background-color: #667eea;
+            color: white;
+        }
+
+        .autocomplete-option .class-preview {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+            margin-right: 8px;
+            border: 1px solid #d1d5db;
+        }
+
+        /* Ensure parent containers don't interfere and take full width */
+        .style-info {
+            display: block !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+        }
+
+        /* Ensure the style popup and display containers take full width */
+        #style-popup {
+            width: 400px !important;
+            min-width: 400px !important;
+            max-width: 400px !important;
+            box-sizing: border-box !important;
+        }
+
+        #style-display {
+            width: 100% !important;
+            box-sizing: border-box !important;
+        }
+
+        /* Force chips to be inline */
+        .property-chip {
+            display: inline-flex !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            flex-shrink: 0 !important;
+            margin: 0 !important;
+            float: none !important;
+            clear: none !important;
+        }
+
+        .property-chip {
+            position: relative;
+            display: inline-flex !important;
+            align-items: center;
+            gap: 6px;
+            background: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            border-radius: 20px;
+            padding: 6px 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 13px;
+            min-height: 32px;
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+
+        .property-chip:hover {
+            background: #e5e7eb;
+            border-color: #d1d5db;
+        }
+
+        .property-chip.active {
+            background: #dbeafe;
+            border-color: #3b82f6;
+            color: #1d4ed8;
+        }
+
+        .chip-label {
+            font-weight: 500;
+            color: #6b7280;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .chip-value {
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .chip-color-preview {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 1px solid #d1d5db;
+            flex-shrink: 0;
+        }
+
+        .chip-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            z-index: 4000;
+            margin-top: 8px;
+            display: none;
+            min-width: 200px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .chip-dropdown.show {
+            display: block;
+        }
+
+        .chip-dropdown .size-option,
+        .chip-dropdown .weight-option,
+        .chip-dropdown .align-option {
+            padding: 10px 14px;
+            font-size: 14px;
+            color: #374151;
+            cursor: pointer;
+            border-bottom: 1px solid #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: background-color 0.1s ease;
+        }
+
+        .chip-dropdown .size-option:last-child,
+        .chip-dropdown .weight-option:last-child,
+        .chip-dropdown .align-option:last-child {
+            border-bottom: none;
+        }
+
+        .chip-dropdown .size-option:hover,
+        .chip-dropdown .weight-option:hover,
+        .chip-dropdown .align-option:hover {
+            background-color: #f9fafb;
+        }
+
+        .chip-dropdown .size-option.selected,
+        .chip-dropdown .weight-option.selected,
+        .chip-dropdown .align-option.selected {
+            background-color: #667eea;
+            color: white;
+        }
+
+        .chip-dropdown .size-option-check,
+        .chip-dropdown .weight-option-check,
+        .chip-dropdown .align-option-check {
+            width: 16px;
+            height: 16px;
+            opacity: 0;
+        }
+
+        .chip-dropdown .size-option.selected .size-option-check,
+        .chip-dropdown .weight-option.selected .weight-option-check,
+        .chip-dropdown .align-option.selected .align-option-check {
+            opacity: 1;
+        }
+
+        /* Color dropdown specific styles */
+        .chip-dropdown.color-dropdown {
+            min-width: 280px;
+            padding: 16px;
+        }
+
+        .chip-dropdown.color-dropdown .color-picker-tabs {
+            display: flex;
+            background: #f3f4f6;
+            border-radius: 8px;
+            padding: 2px;
+            margin-bottom: 16px;
+        }
+
+        .chip-dropdown.color-dropdown .color-picker-tab {
+            flex: 1;
+            padding: 6px 12px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 500;
+            color: #6b7280;
+            background: transparent;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .chip-dropdown.color-dropdown .color-picker-tab.active {
+            background: white;
+            color: #374151;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Style unit display */
+        .style-unit {
+            color: #6b7280;
+            font-size: 12px;
+            margin-left: 4px;
+        }
+
+        /* Advanced Menu */
+        .advanced-row {
+            position: relative;
+        }
+
+        .advanced-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            z-index: 4000;
+            margin-top: 8px;
+            padding: 16px;
+            display: none;
+            min-width: 300px;
+        }
+
+        .advanced-menu.show {
+            display: block;
+        }
+
+        .advanced-menu-header {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .advanced-menu-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: transparent;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #374151;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .advanced-menu-btn:hover {
+            background: #f9fafb;
+            border-color: #d1d5db;
+        }
+
+        .advanced-menu-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .element-classes-display {
+            background: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 16px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 13px;
+            color: #374151;
+            line-height: 1.5;
+            word-wrap: break-word;
+        }
+
+        .individual-classes-list {
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .individual-class-item {
+            position: relative;
+            margin-bottom: 2px;
+        }
+
+        .individual-class {
+            padding: 8px 12px;
+            font-size: 13px;
+            color: #374151;
+            cursor: pointer;
+            border-radius: 6px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            transition: all 0.1s ease;
+            display: block;
+            width: 100%;
+            background: transparent;
+            border: none;
+            text-align: left;
+        }
+
+        .individual-class:hover {
+            background: #f3f4f6;
+        }
+
+        .individual-class.selected {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .class-submenu {
+            position: absolute;
+            top: 0;
+            left: 100%;
+            margin-left: 8px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            padding: 8px;
+            z-index: 5000;
+            min-width: 150px;
+            max-height: 200px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .class-submenu.show {
+            display: block;
+        }
+
+        .class-submenu-option {
+            padding: 6px 10px;
+            font-size: 12px;
+            color: #374151;
+            cursor: pointer;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            transition: all 0.1s ease;
+            margin-bottom: 1px;
+        }
+
+        .class-submenu-option:hover {
+            background: #f3f4f6;
+        }
+
+        .class-submenu-option.current {
+            background: #667eea;
+            color: white;
+        }
+
+        .prompt-toolbar {
+            position: relative;
+            display: flex;
+            align-items: center;
+            flex: 1;
+            height: 100%;
+        }
+
+        .floating-prompt input {
+            flex: 1;
+            height: 32px;
+            border: none;
+            background: transparent;
+            padding: 0;
+            font-family: inherit;
+            font-size: 14px;
+            outline: none;
+            min-width: 0;
+        }
+
+        .floating-prompt input::placeholder {
+            color: #9ca3af;
+        }
+
+        .send-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 20px;
+            border-radius: 50%;
+            background: #6c757d;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .send-button:hover {
+            background: #5a6268;
+        }
+
+        .send-button svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .toolbar-separator {
+            width: 3px;
+            height: 24px;
+            background: #e5e7eb;
+            border-radius: 2px;
+        }
+
+        .toolbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .action-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            cursor: pointer;
+            border-radius: 6px;
+            background-color: transparent;
+            border: none;
+            color: #6c757d;
+            transition: all 0.1s ease-in-out;
+            position: relative;
+        }
+
+        .action-button:hover {
+            background-color: #f3f4f6;
+        }
+
+        .action-button.active {
+            background-color: #667eea;
+            color: white;
+        }
+
+        .action-button svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .spacing-popup {
+            position: absolute;
+            top: 40px;
+            right: 0;
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            padding: 8px;
+            z-index: 3000;
+            width: 288px !important;
+            min-width: 288px !important;
+            max-width: 288px !important;
+            box-sizing: border-box !important;
+            display: none;
+            animation: fadeIn 0.2s ease-out;
+        }
+
+        .spacing-popup.show {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .spacing-popup-arrow {
+            position: absolute;
+            top: -6px;
+            right: 8px;
+            width: 12px;
+            height: 12px;
+            background: white;
+            border: 1px solid #dee2e6;
+            border-right: none;
+            border-bottom: none;
+            transform: rotate(45deg);
+        }
+
+
+
+
+
         @media (max-width: 768px) {
             .main-container {
                 flex-direction: column;
             }
-            
+
             .sidebar {
                 width: 100%;
                 height: 300px;
             }
-            
+
             .toolbar-controls {
                 flex-wrap: wrap;
                 gap: 5px;
@@ -256,15 +1418,17 @@
         }
     </style>
 </head>
+
 <body>
     <div class="toolbar">
         <h1>🎯 Kiro AI Visual Dev Tool</h1>
         <div class="toolbar-controls">
-            <input type="url" class="url-input" id="url-input" placeholder="Enter URL to analyze..." value="https://example.com">
-            <button class="btn btn-primary" onclick="loadPage()">Load Page</button>
-            <button class="btn btn-primary" onclick="toggleInspector()" id="inspector-btn">Start Inspector</button>
-            <span class="status-indicator status-disconnected" id="status-indicator"></span>
-            <span id="status-text">Disconnected</span>
+            <select class="url-input" id="page-selector">
+                <option value="">Select a page to analyze...</option>
+            </select>
+
+            <button class="btn btn-primary" id="inspector-btn">Start Inspector</button>
+
         </div>
     </div>
 
@@ -280,10 +1444,7 @@
 
             <div class="sidebar-section prompt-section">
                 <h3>💬 AI Prompt</h3>
-                <textarea 
-                    class="prompt-textarea" 
-                    id="ai-prompt" 
-                    placeholder="Describe what you want to do with the selected element...
+                <textarea class="prompt-textarea" id="ai-prompt" placeholder="Describe what you want to do with the selected element...
 
 Examples:
 • Make this button more prominent
@@ -292,10 +1453,10 @@ Examples:
 • Improve the accessibility of this form
 • Generate similar components
 • Explain how this element works"></textarea>
-                
+
                 <div class="prompt-actions">
-                    <button class="btn btn-primary" onclick="clearPrompt()">Clear</button>
-                    <button class="btn btn-success" onclick="sendToKiro()" id="send-btn" disabled>Send to Kiro</button>
+                    <button class="btn btn-primary" id="clear-btn">Clear</button>
+                    <button class="btn btn-success" id="send-btn" disabled>Send to Kiro</button>
                 </div>
             </div>
         </div>
@@ -303,10 +1464,54 @@ Examples:
         <div class="content-area">
             <div class="iframe-container">
                 <div class="loading" id="loading">
-                    🌐 Enter a URL and click "Load Page" to start analyzing
+                    🌐 Select a page to start analyzing
                 </div>
                 <iframe class="target-iframe" id="target-iframe" style="display: none;"></iframe>
-                <div class="overlay" id="overlay"></div>
+                <div class="overlay" id="overlay">
+                    <!-- Floating Prompt Interface -->
+                    <div class="floating-prompt" id="floating-prompt">
+                        <h3>🎯 AI Analysis</h3>
+                        <div class="element-preview" id="element-preview">
+                            Select an element to analyze
+                        </div>
+
+                        <div class="prompt-toolbar">
+                            <input type="text" id="floating-prompt-text" placeholder="Ask for quick changes..." />
+                            <button class="send-button" id="floating-send" disabled>
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor">
+                                    <path
+                                        d="M442.39-616.87 309.78-487.26q-11.82 11.83-27.78 11.33t-27.78-12.33q-11.83-11.83-11.83-27.78 0-15.96 11.83-27.79l198.43-199q11.83-11.82 28.35-11.82t28.35 11.82l198.43 199q11.83 11.83 11.83 27.79 0 15.95-11.83 27.78-11.82 11.83-27.78 11.83t-27.78-11.83L521.61-618.87v348.83q0 16.95-11.33 28.28-11.32 11.33-28.28 11.33t-28.28-11.33q-11.33-11.33-11.33-28.28z" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div class="toolbar-separator"></div>
+
+                        <div class="toolbar-actions">
+                            <button class="action-button" id="spacing-icon" title="Edit spacing" style="display: none;">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor">
+                                    <path
+                                        d="M223-180h97q12.75 0 21.38 8.68 8.62 8.67 8.62 21.5 0 12.82-8.62 21.32-8.63 8.5-21.38 8.5H150q-12.75 0-21.37-8.63Q120-137.25 120-150v-170q0-12.75 8.68-21.38 8.67-8.62 21.5-8.62 12.82 0 21.32 8.62 8.5 8.63 8.5 21.38v97l127-127q9-9 21.5-9t21.5 9 9 21.5-9 21.5zm514 0L611-306q-9-9-8.5-21.5T612-349t21.5-9 21.5 9l125 126v-97q0-12.75 8.68-21.38 8.67-8.62 21.5-8.62 12.82 0 21.32 8.62 8.5 8.63 8.5 21.38v170q0 12.75-8.62 21.37Q822.75-120 810-120H640q-12.75 0-21.37-8.68-8.63-8.67-8.63-21.5 0-12.82 8.63-21.32 8.62-8.5 21.37-8.5zM180-737v97q0 12.75-8.68 21.37-8.67 8.63-21.5 8.63-12.82 0-21.32-8.63-8.5-8.62-8.5-21.37v-170q0-12.75 8.63-21.38Q137.25-840 150-840h170q12.75 0 21.38 8.68 8.62 8.67 8.62 21.5 0 12.82-8.62 21.32-8.63 8.5-21.38 8.5h-97l126 126q9 9 9 21t-9 21-21.5 9-21.5-9zm600 0L654-611q-9 9-21 8.5t-21-9.5-9-21.5 9-21.5l125-125h-97q-12.75 0-21.37-8.68-8.63-8.67-8.63-21.5 0-12.82 8.63-21.32 8.62-8.5 21.37-8.5h170q12.75 0 21.38 8.62Q840-822.75 840-810v170q0 12.75-8.68 21.37-8.67 8.63-21.5 8.63-12.82 0-21.32-8.63-8.5-8.62-8.5-21.37z" />
+                                </svg>
+                                <div id="spacing-popup" class="spacing-popup">
+                                    <div class="spacing-popup-arrow"></div>
+                                    <div id="spacing-display"></div>
+                                </div>
+                            </button>
+                            <button class="action-button" id="style-icon" title="Edit background & border"
+                                style="display: none;">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentColor">
+                                    <path
+                                        d="M215-117q-33.83 0-66.92-11.5Q115-140 90-166q35-12 50-35t15-62q0-43.75 30.68-74.38Q216.35-368 260.18-368q43.82 0 74.32 30.62Q365-306.75 365-263q0 64-43.5 105T215-117m0-60q35 0 62.5-25t27.5-61q0-20-12.5-32.5T260-308t-32.5 12.5T215-263q0 39-8.5 57.5T175-183q6 1 20 3.5t20 2.5m230-177-90-95 376-376q14-14 31-14.5t32 14.5l29 29q15 15 14.5 32.5T823-732zm-185 91" />
+                                </svg>
+                                <div id="style-popup" class="spacing-popup">
+                                    <div class="spacing-popup-arrow"></div>
+                                    <div id="style-display"></div>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -319,18 +1524,29 @@ Examples:
                 this.iframe = document.getElementById('target-iframe');
                 this.overlay = document.getElementById('overlay');
                 this.currentHighlight = null;
+                this.floatingPrompt = document.getElementById('floating-prompt');
                 this.mcpServerUrl = 'http://localhost:3001';
-                
+
                 this.initializeEventListeners();
-                this.checkConnection();
+                this.populatePageSelector();
+
+                // Make instance globally accessible for spacing updates
+                window.kiroTool = this;
             }
 
             initializeEventListeners() {
-                // URL input enter key
-                document.getElementById('url-input').addEventListener('keypress', (e) => {
-                    if (e.key === 'Enter') {
+                // Page selector change
+                document.getElementById('page-selector').addEventListener('change', (e) => {
+                    if (e.target.value) {
                         this.loadPage();
                     }
+                });
+
+
+
+                // Inspector toggle button
+                document.getElementById('inspector-btn').addEventListener('click', () => {
+                    this.toggleInspector();
                 });
 
                 // Iframe load event
@@ -342,16 +1558,158 @@ Examples:
                 document.getElementById('ai-prompt').addEventListener('input', () => {
                     this.updateSendButton();
                 });
+
+                // Clear prompt button
+                document.getElementById('clear-btn').addEventListener('click', () => {
+                    this.clearPrompt();
+                });
+
+                // Send to Kiro button
+                document.getElementById('send-btn').addEventListener('click', () => {
+                    this.sendToKiro();
+                });
+
+                // Floating prompt event listeners
+
+                const sendBtn = document.getElementById('floating-send');
+                if (sendBtn) {
+                    sendBtn.addEventListener('click', () => {
+                        this.sendFloatingPrompt();
+                    });
+                    console.log('Send button event listener added');
+                } else {
+                    console.error('floating-send button not found');
+                }
+
+                document.getElementById('floating-prompt-text').addEventListener('input', () => {
+                    this.updateFloatingPromptButton();
+                });
+
+                // Close floating prompt when clicking outside
+                this.overlay.addEventListener('click', (e) => {
+                    // Only close if clicking directly on the overlay, not on the floating prompt or its children
+                    if (e.target === this.overlay && !this.floatingPrompt.contains(e.target)) {
+                        this.hideFloatingPrompt();
+                    }
+                });
+
+                // Spacing icon functionality
+                document.getElementById('spacing-icon').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.toggleSpacingPopup();
+                });
+
+                // Style icon functionality
+                document.getElementById('style-icon').addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    this.toggleStylePopup();
+                });
+
+
+
+                // Close spacing popup when clicking outside
+                document.addEventListener('click', (e) => {
+                    const spacingPopup = document.getElementById('spacing-popup');
+                    const spacingIcon = document.getElementById('spacing-icon');
+
+                    if (spacingPopup && spacingIcon && !spacingIcon.contains(e.target)) {
+                        spacingPopup.classList.remove('show');
+                        spacingIcon.classList.remove('active');
+                    }
+                });
+
+                // Close style popup when clicking outside
+                document.addEventListener('click', (e) => {
+                    const stylePopup = document.getElementById('style-popup');
+                    const styleIcon = document.getElementById('style-icon');
+
+                    if (stylePopup && styleIcon && !styleIcon.contains(e.target)) {
+                        stylePopup.classList.remove('show');
+                        styleIcon.classList.remove('active');
+                    }
+                });
+
+                // Close color picker submenu when clicking outside
+                document.addEventListener('click', (e) => {
+                    const colorSubmenus = document.querySelectorAll('.color-picker-submenu.show');
+                    colorSubmenus.forEach(submenu => {
+                        if (!submenu.contains(e.target) && !submenu.closest('.style-input-container').contains(e.target)) {
+                            submenu.classList.remove('show');
+                        }
+                    });
+                });
+
+                // Close chip dropdowns when clicking outside
+                document.addEventListener('click', (e) => {
+                    const chipDropdowns = document.querySelectorAll('.chip-dropdown.show');
+                    chipDropdowns.forEach(dropdown => {
+                        const chip = dropdown.closest('.property-chip');
+                        if (!chip.contains(e.target)) {
+                            dropdown.classList.remove('show');
+                            chip.classList.remove('active');
+                        }
+                    });
+                });
+
+                // Close radius dropdown when clicking outside
+                document.addEventListener('click', (e) => {
+                    const radiusDropdowns = document.querySelectorAll('.radius-dropdown.show');
+                    radiusDropdowns.forEach(dropdown => {
+                        if (!dropdown.contains(e.target) && !dropdown.closest('.radius-dropdown-container').contains(e.target)) {
+                            dropdown.classList.remove('show');
+                        }
+                    });
+                });
+
+                // Close font weight dropdown when clicking outside
+                document.addEventListener('click', (e) => {
+                    const weightDropdowns = document.querySelectorAll('.weight-dropdown.show');
+                    weightDropdowns.forEach(dropdown => {
+                        if (!dropdown.contains(e.target) && !dropdown.closest('.weight-dropdown-container').contains(e.target)) {
+                            dropdown.classList.remove('show');
+                        }
+                    });
+                });
+
+                // Close font size dropdown when clicking outside
+                document.addEventListener('click', (e) => {
+                    const sizeDropdowns = document.querySelectorAll('.size-dropdown.show');
+                    sizeDropdowns.forEach(dropdown => {
+                        if (!dropdown.contains(e.target) && !dropdown.closest('.size-dropdown-container').contains(e.target)) {
+                            dropdown.classList.remove('show');
+                        }
+                    });
+                });
+
+                // Close text align dropdown when clicking outside
+                document.addEventListener('click', (e) => {
+                    const alignDropdowns = document.querySelectorAll('.align-dropdown.show');
+                    alignDropdowns.forEach(dropdown => {
+                        if (!dropdown.contains(e.target) && !dropdown.closest('.align-dropdown-container').contains(e.target)) {
+                            dropdown.classList.remove('show');
+                        }
+                    });
+                });
+
+                // Close advanced menu when clicking outside
+                document.addEventListener('click', (e) => {
+                    const advancedMenus = document.querySelectorAll('.advanced-menu.show');
+                    advancedMenus.forEach(menu => {
+                        if (!menu.contains(e.target) && !menu.closest('.advanced-row').contains(e.target)) {
+                            menu.classList.remove('show');
+                        }
+                    });
+                });
             }
 
             async checkConnection() {
                 const statusIndicator = document.getElementById('status-indicator');
                 const statusText = document.getElementById('status-text');
-                
+
                 try {
                     statusIndicator.className = 'status-indicator status-connecting';
                     statusText.textContent = 'Connecting...';
-                    
+
                     const response = await fetch(`${this.mcpServerUrl}/status`);
                     if (response.ok) {
                         statusIndicator.className = 'status-indicator status-connected';
@@ -365,23 +1723,80 @@ Examples:
                 }
             }
 
+            async populatePageSelector() {
+                const selector = document.getElementById('page-selector');
+
+                try {
+                    // Get list of available pages from the server
+                    const response = await fetch('/api/pages');
+                    let pages;
+
+                    if (response.ok) {
+                        pages = await response.json();
+                    } else {
+                        // Fallback: use known pages if API is not available
+                        pages = [
+                            { path: '/', name: 'Home' },
+                            { path: '/ai-dev-tool', name: 'AI Dev Tool' },
+                            { path: '/demo-page.html', name: 'Demo Page' },
+                            { path: '/mcp-test', name: 'MCP Test' },
+                            { path: '/proxy-test', name: 'Proxy Test' }
+                        ];
+                    }
+
+                    // Clear existing options except the first one
+                    selector.innerHTML = '<option value="">Select a page to analyze...</option>';
+
+                    // Add pages to dropdown
+                    pages.forEach(page => {
+                        const option = document.createElement('option');
+                        option.value = page.path;
+                        option.textContent = page.name;
+                        selector.appendChild(option);
+                    });
+
+                } catch (error) {
+                    console.error('Failed to load pages:', error);
+                    // Use fallback pages
+                    selector.innerHTML = `
+                        <option value="">Select a page to analyze...</option>
+                        <option value="/">Home</option>
+                        <option value="/ai-dev-tool">AI Dev Tool</option>
+                        <option value="/demo-page.html">Demo Page</option>
+                        <option value="/mcp-test">MCP Test</option>
+                        <option value="/proxy-test">Proxy Test</option>
+                    `;
+                }
+            }
+
             loadPage() {
-                const url = document.getElementById('url-input').value;
-                if (!url) return;
+                const selectedPath = document.getElementById('page-selector').value;
+                console.log('Loading page:', selectedPath);
+
+                if (!selectedPath) {
+                    console.log('No page selected');
+                    return;
+                }
+
+                // Convert relative path to full URL
+                const baseUrl = window.location.origin;
+                const url = selectedPath.startsWith('/') ? `${baseUrl}${selectedPath}` : `${baseUrl}/${selectedPath}`;
 
                 const loading = document.getElementById('loading');
                 loading.style.display = 'flex';
                 loading.textContent = '🔄 Loading page...';
-                
+
                 this.iframe.style.display = 'none';
                 this.iframe.src = url;
+
+                console.log('Iframe src set to:', url);
             }
 
             onIframeLoad() {
                 const loading = document.getElementById('loading');
                 loading.style.display = 'none';
                 this.iframe.style.display = 'block';
-                
+
                 try {
                     // Try to access iframe content (will fail for cross-origin)
                     const iframeDoc = this.iframe.contentDocument || this.iframe.contentWindow.document;
@@ -401,13 +1816,21 @@ Examples:
             }
 
             setupElementInspection(doc) {
-                if (!doc) return;
+                if (!doc) {
+                    console.log('No document provided for inspection setup');
+                    return;
+                }
+
+                console.log('Setting up element inspection for document:', doc);
 
                 // Add click listeners to all elements
                 const elements = doc.querySelectorAll('*');
+                console.log('Found', elements.length, 'elements to add listeners to');
+
                 elements.forEach(element => {
                     element.addEventListener('click', (e) => {
                         if (this.isInspecting) {
+                            console.log('Element clicked:', element);
                             e.preventDefault();
                             e.stopPropagation();
                             this.selectElement(element);
@@ -416,6 +1839,7 @@ Examples:
 
                     element.addEventListener('mouseover', (e) => {
                         if (this.isInspecting) {
+                            console.log('Element hovered:', element);
                             e.stopPropagation();
                             this.highlightElement(element);
                         }
@@ -426,36 +1850,78 @@ Examples:
             toggleInspector() {
                 this.isInspecting = !this.isInspecting;
                 const btn = document.getElementById('inspector-btn');
-                
+
+                console.log('Inspector toggled. Now inspecting:', this.isInspecting);
+
                 if (this.isInspecting) {
                     btn.textContent = 'Stop Inspector';
                     btn.className = 'btn btn-danger';
                     this.iframe.style.cursor = 'crosshair';
+                    console.log('Inspector started - cursor set to crosshair');
                 } else {
                     btn.textContent = 'Start Inspector';
                     btn.className = 'btn btn-primary';
                     this.iframe.style.cursor = 'default';
                     this.clearHighlight();
+                    this.hideFloatingPrompt();
+                    console.log('Inspector stopped');
                 }
             }
 
             highlightElement(element) {
-                if (!this.isInspecting) return;
+                if (!this.isInspecting) {
+                    console.log('Not inspecting, skipping highlight');
+                    return;
+                }
 
+                // Don't override persistent highlight when menu is open
+                if (this.floatingPrompt && this.floatingPrompt.classList.contains('show')) {
+                    return;
+                }
+
+                console.log('Highlighting element:', element);
                 this.clearHighlight();
-                
+
+                // Get element position relative to the iframe document
                 const rect = element.getBoundingClientRect();
-                const iframeRect = this.iframe.getBoundingClientRect();
-                
+
+                // Get the iframe container position
+                const iframeContainer = this.iframe.parentElement;
+                const containerRect = iframeContainer.getBoundingClientRect();
+
+                console.log('Element rect:', rect);
+                console.log('Container rect:', containerRect);
+
                 const highlight = document.createElement('div');
                 highlight.className = 'highlight';
-                highlight.style.left = (iframeRect.left + rect.left) + 'px';
-                highlight.style.top = (iframeRect.top + rect.top) + 'px';
+                highlight.style.position = 'absolute';
+
+                // Position relative to the iframe container (overlay parent)
+                // Since overlay is positioned absolute with top:0, left:0 relative to iframe container
+                const left = rect.left;
+                const top = rect.top;
+
+                highlight.style.left = left + 'px';
+                highlight.style.top = top + 'px';
                 highlight.style.width = rect.width + 'px';
                 highlight.style.height = rect.height + 'px';
-                
+                highlight.style.border = '2px solid #667eea';
+                highlight.style.background = 'rgba(102, 126, 234, 0.1)';
+                highlight.style.pointerEvents = 'none';
+                highlight.style.zIndex = '1000';
+                highlight.style.boxSizing = 'border-box';
+
+                console.log('Highlight styles:', {
+                    left: highlight.style.left,
+                    top: highlight.style.top,
+                    width: highlight.style.width,
+                    height: highlight.style.height
+                });
+
                 this.overlay.appendChild(highlight);
                 this.currentHighlight = highlight;
+
+                console.log('Highlight element added to overlay');
             }
 
             clearHighlight() {
@@ -465,21 +1931,62 @@ Examples:
                 }
             }
 
+            createPersistentHighlight(element) {
+                // Clear any existing highlight first
+                this.clearHighlight();
+
+                // Get element position relative to the iframe document
+                const rect = element.getBoundingClientRect();
+
+                // Get the iframe container position
+                const iframeContainer = this.iframe.parentElement;
+                const containerRect = iframeContainer.getBoundingClientRect();
+
+                const highlight = document.createElement('div');
+                highlight.className = 'highlight persistent-highlight';
+                highlight.style.position = 'absolute';
+
+                // Position relative to the iframe container (overlay parent)
+                const left = rect.left;
+                const top = rect.top;
+
+                highlight.style.left = left + 'px';
+                highlight.style.top = top + 'px';
+                highlight.style.width = rect.width + 'px';
+                highlight.style.height = rect.height + 'px';
+                highlight.style.border = '2px solid #667eea';
+                highlight.style.background = 'rgba(102, 126, 234, 0.1)';
+                highlight.style.pointerEvents = 'none';
+                highlight.style.zIndex = '1000';
+                highlight.style.boxSizing = 'border-box';
+
+                this.overlay.appendChild(highlight);
+                this.currentHighlight = highlight;
+
+                console.log('Persistent highlight created for selected element');
+            }
+
             selectElement(element) {
+                console.log('selectElement - element:', element);
+                console.log('selectElement - element.className:', element.className);
+                console.log('selectElement - element.tagName:', element.tagName);
+
                 this.selectedElement = element;
                 this.updateSelectedElementInfo(element);
                 this.updateSendButton();
-                this.clearHighlight();
+                // Keep the highlight active when menu opens
+                this.createPersistentHighlight(element);
+                this.showFloatingPrompt(element);
             }
 
             updateSelectedElementInfo(element) {
                 const selectedElementDiv = document.getElementById('selected-element');
-                
+
                 const tagName = element.tagName.toLowerCase();
                 const text = element.textContent?.trim().substring(0, 100) || '';
                 const classes = element.className || '';
                 const id = element.id || '';
-                
+
                 selectedElementDiv.innerHTML = `
                     <div class="element-tag">&lt;${tagName}${id ? ` id="${id}"` : ''}&gt;</div>
                     <div class="element-text">${text}${text.length > 100 ? '...' : ''}</div>
@@ -491,13 +1998,1891 @@ Examples:
             updateSendButton() {
                 const sendBtn = document.getElementById('send-btn');
                 const prompt = document.getElementById('ai-prompt').value.trim();
-                
+
                 sendBtn.disabled = !prompt;
             }
 
             clearPrompt() {
                 document.getElementById('ai-prompt').value = '';
                 this.updateSendButton();
+            }
+
+            showFloatingPrompt(element) {
+                const rect = element.getBoundingClientRect();
+                const prompt = this.floatingPrompt;
+
+                // Update element preview
+                const tagName = element.tagName.toLowerCase();
+                const id = element.id ? `#${element.id}` : '';
+                const classes = element.className ? `.${element.className.split(' ').join('.')}` : '';
+                const text = element.textContent?.trim().substring(0, 50) || '';
+
+                // Get computed styles for margin and padding
+                const computedStyles = window.getComputedStyle ?
+                    window.getComputedStyle(element) :
+                    element.ownerDocument.defaultView.getComputedStyle(element);
+
+                // Extract margin values
+                const marginTop = computedStyles.marginTop;
+                const marginRight = computedStyles.marginRight;
+                const marginBottom = computedStyles.marginBottom;
+                const marginLeft = computedStyles.marginLeft;
+
+                // Extract padding values
+                const paddingTop = computedStyles.paddingTop;
+                const paddingRight = computedStyles.paddingRight;
+                const paddingBottom = computedStyles.paddingBottom;
+                const paddingLeft = computedStyles.paddingLeft;
+
+                // Extract background and border-radius values
+                const backgroundColor = computedStyles.backgroundColor;
+                const backgroundImage = computedStyles.backgroundImage;
+                const borderRadius = computedStyles.borderRadius;
+
+                // Extract text properties
+                const fontSize = computedStyles.fontSize;
+                const fontWeight = computedStyles.fontWeight;
+                const color = computedStyles.color;
+                const textAlign = computedStyles.textAlign;
+                const fontFamily = computedStyles.fontFamily;
+
+                // Check if any margin values are non-zero
+                const hasMargin = marginTop !== '0px' || marginRight !== '0px' ||
+                    marginBottom !== '0px' || marginLeft !== '0px';
+
+                // Check if any padding values are non-zero
+                const hasPadding = paddingTop !== '0px' || paddingRight !== '0px' ||
+                    paddingBottom !== '0px' || paddingLeft !== '0px';
+
+                // Check if element has background or border-radius
+                const hasBackground = backgroundColor !== 'rgba(0, 0, 0, 0)' && backgroundColor !== 'transparent' ||
+                    backgroundImage !== 'none';
+                const hasBorderRadius = borderRadius !== '0px';
+
+                // Check if element has text content and properties
+                const hasTextContent = element.textContent && element.textContent.trim().length > 0;
+                const hasTextProperties = hasTextContent || fontSize !== '16px' || fontWeight !== '400' ||
+                    color !== 'rgb(0, 0, 0)' || textAlign !== 'start';
+
+                // Create editable spacing representation
+                let spacingHTML = '';
+
+                if (hasMargin || hasPadding) {
+                    spacingHTML = '<div class="spacing-info">';
+
+                    if (hasMargin) {
+                        const marginTopValue = marginTop.replace('px', '');
+                        const marginRightValue = marginRight.replace('px', '');
+
+                        spacingHTML += `
+                            <div class="spacing-row">
+                                <div class="spacing-label">Margin</div>
+                                <div class="spacing-values">
+                                    <div class="spacing-value-box">
+                                        <div class="spacing-icon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                                <path d="M479.82-80Q467-80 458.5-88.63 450-97.25 450-110v-740q0-12.75 8.68-21.38 8.67-8.62 21.5-8.62 12.82 0 21.32 8.62 8.5 8.63 8.5 21.38v740q0 12.75-8.68 21.37-8.67 8.63-21.5 8.63M600-290q-12.75 0-21.37-8.63Q570-307.25 570-320v-320q0-12.75 8.63-21.38Q587.25-670 600-670h40q12.75 0 21.38 8.62Q670-652.75 670-640v320q0 12.75-8.62 21.37Q652.75-290 640-290zm-280 0q-12.75 0-21.37-8.63Q290-307.25 290-320v-320q0-12.75 8.63-21.38Q307.25-670 320-670h40q12.75 0 21.38 8.62Q390-652.75 390-640v320q0 12.75-8.62 21.37Q372.75-290 360-290z"/>
+                                            </svg>
+                                        </div>
+                                        <input type="text" class="spacing-input" value="${marginRightValue}" 
+                                               placeholder="X margin" data-property="marginRight" data-element-id="${element.id || 'no-id'}"
+                                               onchange="window.kiroTool.updateSpacing(this)">
+                                    </div>
+                                    <div class="spacing-value-box">
+                                        <div class="spacing-icon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                                <path d="M110-450q-12.75 0-21.37-8.68-8.63-8.67-8.63-21.5 0-12.82 8.63-21.32Q97.25-510 110-510h740q12.75 0 21.38 8.68 8.62 8.67 8.62 21.5 0 12.82-8.62 21.32-8.63 8.5-21.38 8.5zm210-120q-12.75 0-21.37-8.63Q290-587.25 290-600v-40q0-12.75 8.63-21.38Q307.25-670 320-670h320q12.75 0 21.38 8.62Q670-652.75 670-640v40q0 12.75-8.62 21.37Q652.75-570 640-570zm0 280q-12.75 0-21.37-8.63Q290-307.25 290-320v-40q0-12.75 8.63-21.38Q307.25-390 320-390h320q12.75 0 21.38 8.62Q670-372.75 670-360v40q0 12.75-8.62 21.37Q652.75-290 640-290z"/>
+                                            </svg>
+                                        </div>
+                                        <input type="text" class="spacing-input" value="${marginTopValue}" 
+                                               placeholder="Y margin" data-property="marginTop" data-element-id="${element.id || 'no-id'}" 
+                                               onchange="window.kiroTool.updateSpacing(this)">
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }
+
+                    if (hasPadding) {
+                        const paddingTopValue = paddingTop.replace('px', '');
+                        const paddingRightValue = paddingRight.replace('px', '');
+
+                        spacingHTML += `
+                            <div class="spacing-row">
+                                <div class="spacing-label">Padding</div>
+                                <div class="spacing-values">
+                                    <div class="spacing-value-box">
+                                        <div class="spacing-icon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                                <path d="M849.82-80Q837-80 828.5-88.63 820-97.25 820-110v-180h-70q-12.75 0-21.37-8.63Q720-307.25 720-320v-320q0-12.75 8.63-21.38Q737.25-670 750-670h70v-180q0-12.75 8.68-21.38 8.67-8.62 21.5-8.62 12.82 0 21.32 8.62 8.5 8.63 8.5 21.38v740q0 12.75-8.68 21.37-8.67 8.63-21.5 8.63m-740 0Q97-80 88.5-88.63 80-97.25 80-110v-740q0-12.75 8.68-21.38 8.67-8.62 21.5-8.62 12.82 0 21.32 8.62 8.5 8.63 8.5 21.38v180h70q12.75 0 21.38 8.62Q240-652.75 240-640v320q0 12.75-8.62 21.37Q222.75-290 210-290h-70v180q0 12.75-8.68 21.37-8.67 8.63-21.5 8.63"/>
+                                            </svg>
+                                        </div>
+                                        <input type="text" class="spacing-input" value="${paddingRightValue}" 
+                                               placeholder="X padding" data-property="paddingRight" data-element-id="${element.id || 'no-id'}"
+                                               onchange="window.kiroTool.updateSpacing(this)">
+                                    </div>
+                                    <div class="spacing-value-box">
+                                        <div class="spacing-icon">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
+                                                <path d="M110-80q-12.75 0-21.37-8.68Q80-97.35 80-110.18q0-12.82 8.63-21.32Q97.25-140 110-140h180v-70q0-12.75 8.63-21.38Q307.25-240 320-240h320q12.75 0 21.38 8.62Q670-222.75 670-210v70h180q12.75 0 21.38 8.68 8.62 8.67 8.62 21.5 0 12.82-8.62 21.32Q862.75-80 850-80zm210-640q-12.75 0-21.37-8.63Q290-737.25 290-750v-70H110q-12.75 0-21.37-8.68-8.63-8.67-8.63-21.5 0-12.82 8.63-21.32Q97.25-880 110-880h740q12.75 0 21.38 8.68 8.62 8.67 8.62 21.5 0 12.82-8.62 21.32-8.63 8.5-21.38 8.5H670v70q0 12.75-8.62 21.37Q652.75-720 640-720z"/>
+                                            </svg>
+                                        </div>
+                                        <input type="text" class="spacing-input" value="${paddingTopValue}" 
+                                               placeholder="Y padding" data-property="paddingTop" data-element-id="${element.id || 'no-id'}"
+                                               onchange="window.kiroTool.updateSpacing(this)">
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }
+
+                    spacingHTML += '</div>';
+                }
+
+                document.getElementById('element-preview').innerHTML = `
+                    &lt;${tagName}${id}${classes}&gt;${text ? ` "${text}${text.length > 50 ? '...' : ''}"` : ''}
+                `;
+
+                // Display spacing information in the popup
+                const spacingDisplay = document.getElementById('spacing-display');
+                const spacingIcon = document.getElementById('spacing-icon');
+
+                if (spacingHTML) {
+                    spacingDisplay.innerHTML = spacingHTML;
+                    spacingIcon.style.display = 'flex';
+
+                    // Add event listeners to spacing inputs
+                    const spacingInputs = spacingDisplay.querySelectorAll('.spacing-input');
+                    spacingInputs.forEach(input => {
+                        input.addEventListener('input', () => {
+                            this.updateSpacing(input);
+                        });
+                    });
+
+                    // Prevent spacing popup from closing when clicking inside it
+                    const spacingPopup = document.getElementById('spacing-popup');
+                    if (spacingPopup) {
+                        spacingPopup.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                        });
+                    }
+                } else {
+                    spacingIcon.style.display = 'none';
+                }
+
+                // Generate CSS classes textarea
+                let styleHTML = '';
+                if (hasTextProperties || hasBackground || hasBorderRadius) {
+                    // Collect all relevant CSS classes from the element
+                    const elementClasses = this.selectedElement ? this.selectedElement.className : '';
+                    const framework = this.detectFramework();
+
+                    // Generate framework-appropriate classes based on current styles
+                    let suggestedClasses = [];
+
+                    if (hasTextProperties) {
+                        // Add font size class
+                        const fontSizeClass = this.getFontSizeClass(fontSize, framework);
+                        if (fontSizeClass) suggestedClasses.push(fontSizeClass);
+
+                        // Add font weight class
+                        const fontWeightClass = this.getFontWeightClass(fontWeight, framework);
+                        if (fontWeightClass) suggestedClasses.push(fontWeightClass);
+
+                        // Add text color class
+                        const textColorClass = this.getTextColorClass(color, framework);
+                        if (textColorClass) suggestedClasses.push(textColorClass);
+
+                        // Add text alignment class
+                        const textAlignClass = this.getTextAlignClass(textAlign, framework);
+                        if (textAlignClass) suggestedClasses.push(textAlignClass);
+                    }
+
+                    if (hasBackground) {
+                        const bgColorClass = this.getBackgroundColorClass(backgroundColor, framework);
+                        if (bgColorClass) suggestedClasses.push(bgColorClass);
+                    }
+
+                    if (hasBorderRadius) {
+                        const radiusValue = borderRadius.replace('px', '');
+                        const radiusClass = this.getBorderRadiusClass(radiusValue, framework);
+                        if (radiusClass) suggestedClasses.push(radiusClass);
+                    }
+
+                    // Combine existing classes with suggested ones, removing duplicates
+                    const existingClasses = elementClasses.split(' ').filter(cls => cls.trim() !== '');
+                    const allClasses = [...new Set([...existingClasses, ...suggestedClasses])];
+                    const classString = allClasses.join(' ');
+
+                    const placeholderText = framework === 'tailwind' ? 'Enter Tailwind classes...' :
+                        framework === 'bootstrap' ? 'Enter Bootstrap classes...' :
+                            'Enter CSS classes...';
+
+                    styleHTML = `
+                        <div class="style-info">
+                            <div class="classes-textarea-container">
+                                <textarea 
+                                    class="classes-textarea" 
+                                    id="classes-textarea"
+                                    placeholder="${placeholderText}"
+                                    rows="3"
+                                >${classString}</textarea>
+
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // Display style information in the popup
+                const styleDisplay = document.getElementById('style-display');
+                const styleIcon = document.getElementById('style-icon');
+
+                if (styleHTML) {
+                    styleDisplay.innerHTML = styleHTML;
+                    styleIcon.style.display = 'flex';
+
+                    // Add event listeners to style inputs
+                    const styleTextInputs = styleDisplay.querySelectorAll('.style-text-input');
+                    const colorPickers = styleDisplay.querySelectorAll('.style-color-picker');
+                    const colorPreviews = styleDisplay.querySelectorAll('.color-preview');
+
+                    styleTextInputs.forEach(input => {
+                        input.addEventListener('input', () => {
+                            this.updateStyleFromText(input);
+                        });
+                    });
+
+                    colorPickers.forEach(picker => {
+                        picker.addEventListener('input', () => {
+                            this.updateStyleFromColor(picker);
+                        });
+                    });
+
+                    colorPreviews.forEach(preview => {
+                        preview.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            this.toggleColorPickerSubmenu(preview);
+                        });
+                    });
+
+                    // Add event listeners for color picker submenu
+                    this.setupColorPickerSubmenu(styleDisplay);
+
+                    // Add event listeners for radius dropdown
+                    this.setupRadiusDropdown(styleDisplay);
+
+                    // Add event listeners for classes textarea
+                    this.setupClassesTextarea(styleDisplay);
+
+                    // Add event listeners for advanced menu
+                    this.setupAdvancedMenu(styleDisplay);
+
+                    // Prevent style popup from closing when clicking inside it
+                    const stylePopup = document.getElementById('style-popup');
+                    if (stylePopup) {
+                        stylePopup.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                        });
+                    }
+                } else {
+                    styleIcon.style.display = 'none';
+                }
+
+                // Position the prompt below the highlighted element
+                // Since the element rect is relative to the iframe document, we can use it directly
+                const promptWidth = 400;
+                const promptHeight = 300;
+
+                // Get iframe container dimensions for boundary checking
+                const iframeContainer = this.iframe.parentElement;
+                const containerRect = iframeContainer.getBoundingClientRect();
+
+                // Center horizontally relative to the element, but keep within iframe bounds
+                let left = rect.left + (rect.width / 2) - (promptWidth / 2);
+
+                // Position below the element with some padding
+                let top = rect.bottom + 15;
+
+                // Keep prompt within iframe container bounds
+                const maxLeft = containerRect.width - promptWidth - 10;
+                const maxTop = containerRect.height - promptHeight - 10;
+
+                if (left < 10) left = 10;
+                if (left > maxLeft) left = maxLeft;
+
+                // If there's not enough space below, position above the element
+                if (top > maxTop) {
+                    top = rect.top - promptHeight - 15;
+                }
+
+                // If still not enough space above, position at the top
+                if (top < 10) top = 10;
+
+                prompt.style.left = left + 'px';
+                prompt.style.top = top + 'px';
+                prompt.classList.add('show');
+
+                // Clear and focus textarea
+                document.getElementById('floating-prompt-text').value = '';
+                document.getElementById('floating-prompt-text').focus();
+                this.updateFloatingPromptButton();
+
+                console.log('Floating prompt positioned at:', { left, top });
+                console.log('Element rect:', rect);
+                console.log('Container rect:', containerRect);
+            }
+
+            hideFloatingPrompt() {
+                console.log('hideFloatingPrompt called');
+                console.log('floatingPrompt element:', this.floatingPrompt);
+
+                if (this.floatingPrompt) {
+                    this.floatingPrompt.classList.remove('show');
+                    console.log('Removed show class');
+                } else {
+                    console.error('floatingPrompt element not found');
+                }
+
+                const textArea = document.getElementById('floating-prompt-text');
+                if (textArea) {
+                    textArea.value = '';
+                    console.log('Cleared textarea');
+                } else {
+                    console.error('floating-prompt-text element not found');
+                }
+
+                // Clear spacing display and reset control
+                const spacingDisplay = document.getElementById('spacing-display');
+                const spacingIcon = document.getElementById('spacing-icon');
+                const spacingPopup = document.getElementById('spacing-popup');
+
+                if (spacingDisplay) {
+                    spacingDisplay.innerHTML = '';
+                }
+
+                if (spacingIcon) {
+                    spacingIcon.style.display = 'none';
+                    spacingIcon.classList.remove('active');
+                }
+
+                if (spacingPopup) {
+                    spacingPopup.classList.remove('show');
+                }
+
+                // Clear style display and reset control
+                const styleDisplay = document.getElementById('style-display');
+                const styleIcon = document.getElementById('style-icon');
+                const stylePopup = document.getElementById('style-popup');
+
+                if (styleDisplay) {
+                    styleDisplay.innerHTML = '';
+                }
+
+                if (styleIcon) {
+                    styleIcon.style.display = 'none';
+                    styleIcon.classList.remove('active');
+                }
+
+                if (stylePopup) {
+                    stylePopup.classList.remove('show');
+                }
+
+                // Clear the persistent highlight when menu closes
+                this.clearHighlight();
+
+                this.updateFloatingPromptButton();
+                console.log('Floating prompt hidden');
+            }
+
+            updateFloatingPromptButton() {
+                const sendBtn = document.getElementById('floating-send');
+                const prompt = document.getElementById('floating-prompt-text').value.trim();
+                sendBtn.disabled = !prompt;
+            }
+
+            toggleSpacingPopup() {
+                const spacingPopup = document.getElementById('spacing-popup');
+                const spacingIcon = document.getElementById('spacing-icon');
+                const stylePopup = document.getElementById('style-popup');
+                const styleIcon = document.getElementById('style-icon');
+
+                if (spacingPopup.classList.contains('show')) {
+                    // Hide spacing popup
+                    spacingPopup.classList.remove('show');
+                    spacingIcon.classList.remove('active');
+                } else {
+                    // Hide style popup if it's open
+                    if (stylePopup && stylePopup.classList.contains('show')) {
+                        stylePopup.classList.remove('show');
+                        styleIcon.classList.remove('active');
+                    }
+
+                    // Show spacing popup
+                    spacingPopup.classList.add('show');
+                    spacingIcon.classList.add('active');
+                }
+            }
+
+            toggleStylePopup() {
+                const stylePopup = document.getElementById('style-popup');
+                const styleIcon = document.getElementById('style-icon');
+                const spacingPopup = document.getElementById('spacing-popup');
+                const spacingIcon = document.getElementById('spacing-icon');
+
+                if (stylePopup.classList.contains('show')) {
+                    // Hide style popup
+                    stylePopup.classList.remove('show');
+                    styleIcon.classList.remove('active');
+                } else {
+                    // Hide spacing popup if it's open
+                    if (spacingPopup && spacingPopup.classList.contains('show')) {
+                        spacingPopup.classList.remove('show');
+                        spacingIcon.classList.remove('active');
+                    }
+
+                    // Show style popup
+                    stylePopup.classList.add('show');
+                    styleIcon.classList.add('active');
+                }
+            }
+
+            updateSpacing(input) {
+                const property = input.getAttribute('data-property');
+                const value = input.value + 'px';
+
+                console.log('Updating spacing:', property, 'to', value);
+
+                if (this.selectedElement) {
+                    // Apply the style change to the selected element
+                    this.selectedElement.style[property] = value;
+                    console.log('Applied', property, '=', value, 'to element:', this.selectedElement);
+
+                    // Update the prompt to include the change
+                    const currentPrompt = document.getElementById('floating-prompt-text').value;
+                    const spacingChange = `Change ${property} to ${value}`;
+
+                    if (!currentPrompt.includes(spacingChange)) {
+                        const newPrompt = currentPrompt ?
+                            `${currentPrompt}\n\n${spacingChange}` :
+                            spacingChange;
+                        document.getElementById('floating-prompt-text').value = newPrompt;
+                        this.updateFloatingPromptButton();
+                    }
+                } else {
+                    console.warn('No selected element to update spacing for');
+                }
+            }
+
+            updateStyleFromText(input) {
+                const property = input.getAttribute('data-property');
+                const unit = input.getAttribute('data-unit');
+                let value = input.value;
+
+                if (property === 'backgroundColor' || property === 'color') {
+                    // Handle color names and hex values
+                    if (value.startsWith('#') || this.isValidColorName(value)) {
+                        this.selectedElement.style[property] = value;
+
+                        // Update color preview
+                        const colorPreview = input.parentElement.querySelector('.color-preview');
+                        if (colorPreview) {
+                            colorPreview.style.backgroundColor = value;
+                        }
+
+                        // Update hidden color picker
+                        const colorPicker = input.parentElement.querySelector('.style-color-picker');
+                        if (colorPicker && value.startsWith('#')) {
+                            colorPicker.value = value;
+                        }
+                    }
+                } else if (property === 'borderRadius') {
+                    // Handle border radius labels and px values
+                    const pxValue = this.getBorderRadiusValue(value);
+                    this.selectedElement.style[property] = pxValue + 'px';
+                } else if (property === 'fontSize') {
+                    // Handle font size with px unit
+                    if (unit && value) {
+                        this.selectedElement.style[property] = value + unit;
+                    }
+                } else {
+                    // Handle other properties directly
+                    this.selectedElement.style[property] = value;
+                }
+
+                this.updatePromptWithChange(property, value);
+            }
+
+            updateStyleFromColor(picker) {
+                const property = picker.getAttribute('data-property');
+                const value = picker.value;
+
+                if (this.selectedElement) {
+                    this.selectedElement.style[property] = value;
+
+                    // Update color preview
+                    const colorPreview = picker.parentElement.querySelector('.color-preview');
+                    if (colorPreview) {
+                        colorPreview.style.backgroundColor = value;
+                    }
+
+                    // Update text input
+                    const textInput = picker.parentElement.querySelector('.style-text-input');
+                    if (textInput) {
+                        textInput.value = this.getColorName(value);
+                    }
+
+                    this.updatePromptWithChange(property, value);
+                }
+            }
+
+            updatePromptWithChange(property, value) {
+                const currentPrompt = document.getElementById('floating-prompt-text').value;
+                const styleChange = `Change ${property} to ${value}`;
+
+                if (!currentPrompt.includes(styleChange)) {
+                    const newPrompt = currentPrompt ?
+                        `${currentPrompt}\n\n${styleChange}` :
+                        styleChange;
+                    document.getElementById('floating-prompt-text').value = newPrompt;
+                    this.updateFloatingPromptButton();
+                }
+            }
+
+            isValidColorName(color) {
+                const colorNames = ['white', 'black', 'red', 'green', 'blue', 'yellow', 'magenta', 'cyan', 'gray', 'silver', 'transparent'];
+                return colorNames.includes(color.toLowerCase());
+            }
+
+            getBorderRadiusValue(label) {
+                const labelMap = {
+                    'none': 0,
+                    'small': 2,
+                    'default': 4,
+                    'medium': 6,
+                    'large': 8,
+                    'xl': 12,
+                    '2xl': 16,
+                    '3xl': 24,
+                    'full': 50
+                };
+
+                const lowerLabel = label.toLowerCase();
+                if (labelMap[lowerLabel] !== undefined) {
+                    return labelMap[lowerLabel];
+                }
+
+                // Try to extract number from string like "16px"
+                const match = label.match(/(\d+)/);
+                return match ? parseInt(match[1]) : 0;
+            }
+
+            generateColorPalettes() {
+                const colorPalettes = {
+                    'Slate': [
+                        '#f8fafc', '#f1f5f9', '#e2e8f0', '#cbd5e1', '#94a3b8',
+                        '#64748b', '#475569', '#334155', '#1e293b', '#0f172a'
+                    ],
+                    'Gray': [
+                        '#f9fafb', '#f3f4f6', '#e5e7eb', '#d1d5db', '#9ca3af',
+                        '#6b7280', '#4b5563', '#374151', '#1f2937', '#111827'
+                    ],
+                    'Zinc': [
+                        '#fafafa', '#f4f4f5', '#e4e4e7', '#d4d4d8', '#a1a1aa',
+                        '#71717a', '#52525b', '#3f3f46', '#27272a', '#18181b'
+                    ],
+                    'Neutral': [
+                        '#fafafa', '#f5f5f5', '#e5e5e5', '#d4d4d4', '#a3a3a3',
+                        '#737373', '#525252', '#404040', '#262626', '#171717'
+                    ]
+                };
+
+                let html = '';
+                for (const [name, colors] of Object.entries(colorPalettes)) {
+                    html += `
+                        <div class="color-palette-section">
+                            <div class="color-palette-title">${name}</div>
+                            <div class="color-palette-grid">
+                                ${colors.map(color => `
+                                    <div class="color-palette-item" 
+                                         style="background-color: ${color}" 
+                                         data-color="${color}"
+                                         title="${color}">
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+                return html;
+            }
+
+            toggleColorPickerSubmenu(preview) {
+                const submenu = preview.parentElement.querySelector('.color-picker-submenu');
+                if (submenu) {
+                    const isVisible = submenu.classList.contains('show');
+
+                    // Hide all other submenus
+                    document.querySelectorAll('.color-picker-submenu.show').forEach(menu => {
+                        menu.classList.remove('show');
+                    });
+
+                    if (!isVisible) {
+                        submenu.classList.add('show');
+                    }
+                }
+            }
+
+            setupColorPickerSubmenu(container) {
+                const submenu = container.querySelector('.color-picker-submenu');
+                if (!submenu) return;
+
+                // Tab switching
+                const tabs = submenu.querySelectorAll('.color-picker-tab');
+                const stylesSection = submenu.querySelector('#styles-section');
+                const customSection = submenu.querySelector('#custom-color-section');
+
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', () => {
+                        tabs.forEach(t => t.classList.remove('active'));
+                        tab.classList.add('active');
+
+                        if (tab.dataset.tab === 'styles') {
+                            stylesSection.style.display = 'block';
+                            customSection.classList.remove('active');
+                        } else {
+                            stylesSection.style.display = 'none';
+                            customSection.classList.add('active');
+                        }
+                    });
+                });
+
+                // Color palette item clicks
+                const paletteItems = submenu.querySelectorAll('.color-palette-item');
+                paletteItems.forEach(item => {
+                    item.addEventListener('click', () => {
+                        const color = item.dataset.color;
+                        this.applyColorFromSubmenu(color, submenu);
+                    });
+                });
+
+                // Custom color input
+                const customColorInput = submenu.querySelector('.custom-color-input');
+                if (customColorInput) {
+                    customColorInput.addEventListener('input', () => {
+                        this.applyColorFromSubmenu(customColorInput.value, submenu);
+                    });
+                }
+
+                // Prevent submenu from closing when clicking inside
+                submenu.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                });
+            }
+
+            applyColorFromSubmenu(color, submenu) {
+                const container = submenu.closest('.style-input-container');
+                const colorPreview = container.querySelector('.color-preview');
+                const textInput = container.querySelector('.style-text-input');
+                const hiddenPicker = container.querySelector('.style-color-picker');
+
+                // Update preview
+                if (colorPreview) {
+                    colorPreview.style.backgroundColor = color;
+                }
+
+                // Update text input
+                if (textInput) {
+                    textInput.value = this.getColorName(color);
+                }
+
+                // Update hidden picker
+                if (hiddenPicker) {
+                    hiddenPicker.value = color;
+                }
+
+                // Apply to element
+                if (this.selectedElement) {
+                    this.selectedElement.style.backgroundColor = color;
+                    this.updatePromptWithChange('backgroundColor', color);
+                }
+
+                // Close submenu
+                submenu.classList.remove('show');
+            }
+
+            detectFramework() {
+                // Try to detect framework from various indicators
+                const html = document.documentElement;
+                const body = document.body;
+
+                // Check for Tailwind CSS
+                if (html.classList.contains('tailwind') ||
+                    body.classList.contains('tailwind') ||
+                    document.querySelector('[class*="tw-"]') ||
+                    document.querySelector('[class*="bg-"]') ||
+                    document.querySelector('[class*="text-"]') ||
+                    document.querySelector('link[href*="tailwind"]') ||
+                    document.querySelector('script[src*="tailwind"]')) {
+                    return 'tailwind';
+                }
+
+                // Check for Bootstrap
+                if (html.classList.contains('bootstrap') ||
+                    body.classList.contains('bootstrap') ||
+                    document.querySelector('[class*="btn-"]') ||
+                    document.querySelector('[class*="col-"]') ||
+                    document.querySelector('link[href*="bootstrap"]') ||
+                    document.querySelector('script[src*="bootstrap"]')) {
+                    return 'bootstrap';
+                }
+
+                // Check for Material-UI/MUI
+                if (document.querySelector('[class*="MuiButton"]') ||
+                    document.querySelector('[class*="Mui"]') ||
+                    document.querySelector('link[href*="material"]')) {
+                    return 'material';
+                }
+
+                // Check for Chakra UI
+                if (document.querySelector('[class*="chakra"]') ||
+                    document.querySelector('[data-theme*="chakra"]')) {
+                    return 'chakra';
+                }
+
+                // Default to CSS/generic
+                return 'css';
+            }
+
+            generateRadiusOptions(framework, currentValue) {
+                const frameworks = {
+                    tailwind: [
+                        { label: 'None', value: '0', class: 'rounded-none' },
+                        { label: 'Small', value: '2', class: 'rounded-sm' },
+                        { label: 'Default', value: '4', class: 'rounded' },
+                        { label: 'Medium', value: '6', class: 'rounded-md' },
+                        { label: 'Large', value: '8', class: 'rounded-lg' },
+                        { label: 'XL', value: '12', class: 'rounded-xl' },
+                        { label: '2XL', value: '16', class: 'rounded-2xl' },
+                        { label: '3XL', value: '24', class: 'rounded-3xl' },
+                        { label: 'Full', value: '9999', class: 'rounded-full' }
+                    ],
+                    bootstrap: [
+                        { label: 'None', value: '0', class: 'rounded-0' },
+                        { label: 'Small', value: '2', class: 'rounded-1' },
+                        { label: 'Default', value: '4', class: 'rounded' },
+                        { label: 'Medium', value: '6', class: 'rounded-2' },
+                        { label: 'Large', value: '8', class: 'rounded-3' },
+                        { label: 'XL', value: '12', class: 'rounded-4' },
+                        { label: '2XL', value: '16', class: 'rounded-5' },
+                        { label: 'Full', value: '50', class: 'rounded-pill' }
+                    ],
+                    material: [
+                        { label: 'None', value: '0', class: 'rounded-none' },
+                        { label: 'Small', value: '4', class: 'rounded-sm' },
+                        { label: 'Medium', value: '8', class: 'rounded-md' },
+                        { label: 'Large', value: '12', class: 'rounded-lg' },
+                        { label: 'XL', value: '16', class: 'rounded-xl' },
+                        { label: 'Full', value: '50', class: 'rounded-full' }
+                    ],
+                    chakra: [
+                        { label: 'None', value: '0', class: 'rounded-none' },
+                        { label: 'Small', value: '2', class: 'rounded-sm' },
+                        { label: 'Base', value: '4', class: 'rounded-base' },
+                        { label: 'Medium', value: '6', class: 'rounded-md' },
+                        { label: 'Large', value: '8', class: 'rounded-lg' },
+                        { label: 'XL', value: '12', class: 'rounded-xl' },
+                        { label: '2XL', value: '16', class: 'rounded-2xl' },
+                        { label: 'Full', value: '9999', class: 'rounded-full' }
+                    ],
+                    css: [
+                        { label: 'None', value: '0' },
+                        { label: 'Small', value: '2' },
+                        { label: 'Default', value: '4' },
+                        { label: 'Medium', value: '6' },
+                        { label: 'Large', value: '8' },
+                        { label: 'XL', value: '12' },
+                        { label: '2XL', value: '16' },
+                        { label: '3XL', value: '24' },
+                        { label: 'Full', value: '50' }
+                    ]
+                };
+
+                const options = frameworks[framework] || frameworks.css;
+
+                return options.map(option => {
+                    const isSelected = option.value === currentValue;
+                    return `
+                        <div class="radius-option ${isSelected ? 'selected' : ''}" 
+                             data-value="${option.value}" 
+                             data-label="${option.label}"
+                             ${option.class ? `data-class="${option.class}"` : ''}>
+                            <span>${option.label}</span>
+                            <svg class="radius-option-check" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+                            </svg>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            setupRadiusDropdown(container) {
+                const radiusContainer = container.querySelector('.radius-dropdown-container');
+                if (!radiusContainer) return;
+
+                const radiusInput = radiusContainer.querySelector('.radius-input');
+                const radiusDropdown = radiusContainer.querySelector('.radius-dropdown');
+                const dropdownArrow = radiusContainer.querySelector('.dropdown-arrow');
+
+                // Toggle dropdown on click
+                const toggleDropdown = (e) => {
+                    e.stopPropagation();
+                    const isVisible = radiusDropdown.classList.contains('show');
+
+                    // Hide all other dropdowns
+                    document.querySelectorAll('.radius-dropdown.show').forEach(dropdown => {
+                        dropdown.classList.remove('show');
+                    });
+
+                    if (!isVisible) {
+                        radiusDropdown.classList.add('show');
+                    }
+                };
+
+                radiusInput.addEventListener('click', toggleDropdown);
+                dropdownArrow.addEventListener('click', toggleDropdown);
+
+                // Handle option selection
+                const radiusOptions = radiusDropdown.querySelectorAll('.radius-option');
+                radiusOptions.forEach(option => {
+                    option.addEventListener('click', (e) => {
+                        e.stopPropagation();
+
+                        const value = option.dataset.value;
+                        const label = option.dataset.label;
+                        const cssClass = option.dataset.class;
+
+                        // Update input
+                        radiusInput.value = label;
+
+                        // Update selected state
+                        radiusOptions.forEach(opt => opt.classList.remove('selected'));
+                        option.classList.add('selected');
+
+                        // Apply to element
+                        if (this.selectedElement) {
+                            this.selectedElement.style.borderRadius = value + 'px';
+
+                            // If framework class is available, also add the class
+                            if (cssClass) {
+                                // Remove existing radius classes
+                                this.selectedElement.className = this.selectedElement.className
+                                    .replace(/rounded-\w+/g, '')
+                                    .replace(/rounded/g, '')
+                                    .trim();
+
+                                // Add new class
+                                this.selectedElement.classList.add(cssClass);
+                            }
+
+                            this.updatePromptWithChange('borderRadius', `${label} (${value}px)`);
+                        }
+
+                        // Close dropdown
+                        radiusDropdown.classList.remove('show');
+                    });
+                });
+
+                // Prevent dropdown from closing when clicking inside
+                radiusDropdown.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                });
+            }
+
+            setupPropertyChips(container) {
+                const chips = container.querySelectorAll('.property-chip');
+
+                chips.forEach(chip => {
+                    const property = chip.dataset.property;
+                    const dropdown = chip.querySelector('.chip-dropdown');
+
+                    // Toggle dropdown on chip click
+                    chip.addEventListener('click', (e) => {
+                        e.stopPropagation();
+
+                        // Close all other dropdowns
+                        document.querySelectorAll('.chip-dropdown.show').forEach(dd => {
+                            if (dd !== dropdown) {
+                                dd.classList.remove('show');
+                                dd.closest('.property-chip').classList.remove('active');
+                            }
+                        });
+
+                        // Toggle this dropdown
+                        const isVisible = dropdown.classList.contains('show');
+                        if (isVisible) {
+                            dropdown.classList.remove('show');
+                            chip.classList.remove('active');
+                        } else {
+                            dropdown.classList.add('show');
+                            chip.classList.add('active');
+                        }
+                    });
+
+                    // Handle option selection based on property type
+                    if (property === 'fontSize') {
+                        this.setupFontSizeChipOptions(chip, dropdown);
+                    } else if (property === 'fontWeight') {
+                        this.setupFontWeightChipOptions(chip, dropdown);
+                    } else if (property === 'color') {
+                        this.setupColorChipOptions(chip, dropdown);
+                    } else if (property === 'textAlign') {
+                        this.setupTextAlignChipOptions(chip, dropdown);
+                    } else if (property === 'backgroundColor') {
+                        this.setupBackgroundColorChipOptions(chip, dropdown);
+                    } else if (property === 'borderRadius') {
+                        this.setupBorderRadiusChipOptions(chip, dropdown);
+                    }
+
+                    // Prevent dropdown from closing when clicking inside
+                    dropdown.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                    });
+                });
+            }
+
+            setupFontSizeChipOptions(chip, dropdown) {
+                const options = dropdown.querySelectorAll('.size-option');
+                const chipValue = chip.querySelector('.chip-value');
+
+                options.forEach(option => {
+                    option.addEventListener('click', (e) => {
+                        e.stopPropagation();
+
+                        const value = option.dataset.value;
+                        const label = option.dataset.label;
+                        const cssClass = option.dataset.class;
+
+                        // Update chip display
+                        chipValue.textContent = label;
+
+                        // Update selected state
+                        options.forEach(opt => opt.classList.remove('selected'));
+                        option.classList.add('selected');
+
+                        // Apply to element
+                        if (this.selectedElement) {
+                            this.selectedElement.style.fontSize = value + 'px';
+
+                            // Handle framework classes
+                            if (cssClass) {
+                                const framework = chip.dataset.framework;
+                                if (framework === 'tailwind') {
+                                    this.selectedElement.className = this.selectedElement.className
+                                        .replace(/text-(xs|sm|base|lg|xl|2xl|3xl|4xl|5xl|6xl|7xl|8xl|9xl)/g, '')
+                                        .trim();
+                                } else if (framework === 'bootstrap') {
+                                    this.selectedElement.className = this.selectedElement.className
+                                        .replace(/fs-[1-6]|h[1-6]|display-[1-6]/g, '')
+                                        .trim();
+                                }
+                                this.selectedElement.classList.add(cssClass);
+                            }
+
+                            this.updatePromptWithChange('fontSize', `${label} (${value}px)`);
+                        }
+
+                        // Close dropdown
+                        dropdown.classList.remove('show');
+                        chip.classList.remove('active');
+                    });
+                });
+            }
+
+            setupFontWeightChipOptions(chip, dropdown) {
+                const options = dropdown.querySelectorAll('.weight-option');
+                const chipValue = chip.querySelector('.chip-value');
+
+                options.forEach(option => {
+                    option.addEventListener('click', (e) => {
+                        e.stopPropagation();
+
+                        const value = option.dataset.value;
+                        const label = option.dataset.label;
+
+                        // Update chip display
+                        chipValue.textContent = label;
+
+                        // Update selected state
+                        options.forEach(opt => opt.classList.remove('selected'));
+                        option.classList.add('selected');
+
+                        // Apply to element
+                        if (this.selectedElement) {
+                            this.selectedElement.style.fontWeight = value;
+                            this.updatePromptWithChange('fontWeight', `${label} (${value})`);
+                        }
+
+                        // Close dropdown
+                        dropdown.classList.remove('show');
+                        chip.classList.remove('active');
+                    });
+                });
+            }
+
+            setupColorChipOptions(chip, dropdown) {
+                const chipValue = chip.querySelector('.chip-value');
+                const chipColorPreview = chip.querySelector('.chip-color-preview');
+
+                // Setup color palette items
+                const paletteItems = dropdown.querySelectorAll('.color-palette-item');
+                paletteItems.forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        e.stopPropagation();
+
+                        const color = item.dataset.color;
+                        this.applyColorToChip(color, chip, chipValue, chipColorPreview, dropdown);
+                    });
+                });
+
+                // Setup custom color input
+                const customColorInput = dropdown.querySelector('.custom-color-input');
+                if (customColorInput) {
+                    customColorInput.addEventListener('input', (e) => {
+                        const color = e.target.value;
+                        this.applyColorToChip(color, chip, chipValue, chipColorPreview, dropdown);
+                    });
+                }
+
+                // Setup tabs
+                const tabs = dropdown.querySelectorAll('.color-picker-tab');
+                const stylesSection = dropdown.querySelector('.styles-section');
+                const customSection = dropdown.querySelector('.custom-color-section');
+
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', (e) => {
+                        e.stopPropagation();
+
+                        tabs.forEach(t => t.classList.remove('active'));
+                        tab.classList.add('active');
+
+                        if (tab.dataset.tab === 'styles') {
+                            stylesSection.style.display = 'block';
+                            customSection.classList.remove('active');
+                        } else {
+                            stylesSection.style.display = 'none';
+                            customSection.classList.add('active');
+                        }
+                    });
+                });
+            }
+
+            setupTextAlignChipOptions(chip, dropdown) {
+                const options = dropdown.querySelectorAll('.align-option');
+                const chipValue = chip.querySelector('.chip-value');
+
+                options.forEach(option => {
+                    option.addEventListener('click', (e) => {
+                        e.stopPropagation();
+
+                        const value = option.dataset.value;
+                        const label = option.dataset.label;
+
+                        // Update chip display
+                        chipValue.textContent = label;
+
+                        // Update selected state
+                        options.forEach(opt => opt.classList.remove('selected'));
+                        option.classList.add('selected');
+
+                        // Apply to element
+                        if (this.selectedElement) {
+                            this.selectedElement.style.textAlign = value;
+                            this.updatePromptWithChange('textAlign', `${label} (${value})`);
+                        }
+
+                        // Close dropdown
+                        dropdown.classList.remove('show');
+                        chip.classList.remove('active');
+                    });
+                });
+            }
+
+            applyColorToChip(color, chip, chipValue, chipColorPreview, dropdown) {
+                // Update chip display
+                chipValue.textContent = this.getColorName(color);
+                chipColorPreview.style.backgroundColor = color;
+
+                // Apply to element
+                if (this.selectedElement) {
+                    this.selectedElement.style.color = color;
+                    this.updatePromptWithChange('color', color);
+                }
+
+                // Close dropdown
+                dropdown.classList.remove('show');
+                chip.classList.remove('active');
+            }
+
+            getElementClasses(element) {
+                if (!element) {
+                    return '<span style="color: #9ca3af;">No element provided</span>';
+                }
+
+                console.log('getElementClasses - element:', element);
+                console.log('getElementClasses - element.className:', element.className);
+                console.log('getElementClasses - element.tagName:', element.tagName);
+
+                const classes = element.className.split(' ').filter(cls => cls.trim() !== '');
+
+                console.log('getElementClasses - classes:', classes);
+
+                if (classes.length === 0) {
+                    return '<span style="color: #9ca3af;">No classes found</span>';
+                }
+                return classes.join(' ');
+            }
+
+            generateClassOptions(element) {
+                const classes = element.className.split(' ').filter(cls => cls.trim() !== '');
+                const framework = this.detectFramework();
+
+                if (classes.length === 0) {
+                    return '<div class="class-option">No classes to modify</div>';
+                }
+
+                // Group classes by type
+                const classGroups = this.groupClassesByType(classes, framework);
+                let html = '';
+
+                for (const [groupName, groupClasses] of Object.entries(classGroups)) {
+                    if (groupClasses.length > 0) {
+                        const options = this.getClassTypeOptions(groupName, framework);
+
+                        groupClasses.forEach(currentClass => {
+                            html += `<div class="class-option current" data-class="${currentClass}" data-group="${groupName}">${currentClass}</div>`;
+
+                            // Add alternative options for this class type
+                            options.forEach(option => {
+                                if (option !== currentClass) {
+                                    html += `<div class="class-option" data-class="${option}" data-group="${groupName}" data-replace="${currentClass}">${option}</div>`;
+                                }
+                            });
+                        });
+                    }
+                }
+
+                return html || '<div class="class-option">No modifiable classes found</div>';
+            }
+
+            generateIndividualClassesList(element) {
+                if (!element) {
+                    return '<div class="individual-class">No element provided</div>';
+                }
+
+                console.log('generateIndividualClassesList - element:', element);
+                console.log('generateIndividualClassesList - element.className:', element.className);
+                console.log('generateIndividualClassesList - element.tagName:', element.tagName);
+
+                const classes = element.className.split(' ').filter(cls => cls.trim() !== '');
+                const framework = this.detectFramework();
+
+                console.log('generateIndividualClassesList - classes:', classes);
+                console.log('generateIndividualClassesList - classes.length:', classes.length);
+
+                if (classes.length === 0) {
+                    return '<div class="individual-class">No classes found</div>';
+                }
+
+                let html = '';
+                classes.forEach(className => {
+                    const alternatives = this.getClassAlternatives(className, framework);
+
+                    html += `
+                        <div class="individual-class-item">
+                            <button class="individual-class" data-class="${className}">
+                                ${className}
+                            </button>
+                            <div class="class-submenu" data-for="${className}">
+                                ${alternatives.map(alt => `
+                                    <div class="class-submenu-option ${alt === className ? 'current' : ''}" 
+                                         data-new-class="${alt}" 
+                                         data-old-class="${className}">
+                                        ${alt}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                });
+
+                return html;
+            }
+
+            getClassAlternatives(className, framework) {
+                if (framework === 'tailwind') {
+                    // Text size classes
+                    if (className.match(/^text-(xs|sm|base|lg|xl|2xl|3xl|4xl|5xl|6xl|7xl|8xl|9xl)$/)) {
+                        return ['text-xs', 'text-sm', 'text-base', 'text-lg', 'text-xl', 'text-2xl', 'text-3xl', 'text-4xl', 'text-5xl', 'text-6xl', 'text-7xl', 'text-8xl', 'text-9xl'];
+                    }
+
+                    // Font weight classes
+                    if (className.match(/^font-(thin|extralight|light|normal|medium|semibold|bold|extrabold|black)$/)) {
+                        return ['font-thin', 'font-extralight', 'font-light', 'font-normal', 'font-medium', 'font-semibold', 'font-bold', 'font-extrabold', 'font-black'];
+                    }
+
+                    // Background classes
+                    if (className.startsWith('bg-')) {
+                        return ['bg-transparent', 'bg-white', 'bg-black', 'bg-gray-50', 'bg-gray-100', 'bg-gray-200', 'bg-gray-300', 'bg-gray-400', 'bg-gray-500', 'bg-gray-600', 'bg-gray-700', 'bg-gray-800', 'bg-gray-900', 'bg-red-500', 'bg-blue-500', 'bg-green-500', 'bg-yellow-500', 'bg-purple-500', 'bg-pink-500'];
+                    }
+
+                    // Padding classes
+                    if (className.match(/^p-\d+$/)) {
+                        return ['p-0', 'p-1', 'p-2', 'p-3', 'p-4', 'p-5', 'p-6', 'p-8', 'p-10', 'p-12', 'p-16', 'p-20', 'p-24'];
+                    }
+
+                    // Margin classes
+                    if (className.match(/^m-\d+$/)) {
+                        return ['m-0', 'm-1', 'm-2', 'm-3', 'm-4', 'm-5', 'm-6', 'm-8', 'm-10', 'm-12', 'm-16', 'm-20', 'm-24'];
+                    }
+
+                    // Border radius classes
+                    if (className.match(/^rounded/)) {
+                        return ['rounded-none', 'rounded-sm', 'rounded', 'rounded-md', 'rounded-lg', 'rounded-xl', 'rounded-2xl', 'rounded-3xl', 'rounded-full'];
+                    }
+
+                    // Border width classes
+                    if (className.match(/^border(-\d+)?$/)) {
+                        return ['border-0', 'border', 'border-2', 'border-4', 'border-8'];
+                    }
+
+                    // Shadow classes
+                    if (className.startsWith('shadow')) {
+                        return ['shadow-none', 'shadow-sm', 'shadow', 'shadow-md', 'shadow-lg', 'shadow-xl', 'shadow-2xl'];
+                    }
+                }
+
+                // Return the original class if no alternatives found
+                return [className];
+            }
+
+            groupClassesByType(classes, framework) {
+                const groups = {
+                    text: [],
+                    background: [],
+                    border: [],
+                    spacing: [],
+                    layout: [],
+                    other: []
+                };
+
+                classes.forEach(cls => {
+                    if (framework === 'tailwind') {
+                        if (cls.startsWith('text-')) {
+                            if (cls.match(/text-(xs|sm|base|lg|xl|2xl|3xl|4xl|5xl|6xl|7xl|8xl|9xl)/)) {
+                                groups.text.push(cls);
+                            }
+                        } else if (cls.startsWith('font-')) {
+                            groups.text.push(cls);
+                        } else if (cls.startsWith('bg-')) {
+                            groups.background.push(cls);
+                        } else if (cls.startsWith('border')) {
+                            groups.border.push(cls);
+                        } else if (cls.startsWith('p-') || cls.startsWith('m-') || cls.startsWith('px-') || cls.startsWith('py-') || cls.startsWith('mx-') || cls.startsWith('my-')) {
+                            groups.spacing.push(cls);
+                        } else if (cls.startsWith('flex') || cls.startsWith('grid') || cls.startsWith('block') || cls.startsWith('inline')) {
+                            groups.layout.push(cls);
+                        } else {
+                            groups.other.push(cls);
+                        }
+                    } else {
+                        // For other frameworks, put everything in other for now
+                        groups.other.push(cls);
+                    }
+                });
+
+                return groups;
+            }
+
+            getClassTypeOptions(groupName, framework) {
+                if (framework === 'tailwind') {
+                    const tailwindOptions = {
+                        text: [
+                            'text-xs', 'text-sm', 'text-base', 'text-lg', 'text-xl', 'text-2xl',
+                            'text-3xl', 'text-4xl', 'text-5xl', 'text-6xl', 'text-7xl', 'text-8xl', 'text-9xl',
+                            'font-thin', 'font-extralight', 'font-light', 'font-normal', 'font-medium',
+                            'font-semibold', 'font-bold', 'font-extrabold', 'font-black'
+                        ],
+                        background: [
+                            'bg-transparent', 'bg-white', 'bg-black', 'bg-gray-50', 'bg-gray-100', 'bg-gray-200',
+                            'bg-gray-300', 'bg-gray-400', 'bg-gray-500', 'bg-gray-600', 'bg-gray-700', 'bg-gray-800', 'bg-gray-900',
+                            'bg-red-500', 'bg-blue-500', 'bg-green-500', 'bg-yellow-500', 'bg-purple-500', 'bg-pink-500'
+                        ],
+                        border: [
+                            'border-0', 'border', 'border-2', 'border-4', 'border-8',
+                            'rounded-none', 'rounded-sm', 'rounded', 'rounded-md', 'rounded-lg', 'rounded-xl', 'rounded-2xl', 'rounded-3xl', 'rounded-full'
+                        ],
+                        spacing: [
+                            'p-0', 'p-1', 'p-2', 'p-3', 'p-4', 'p-5', 'p-6', 'p-8', 'p-10', 'p-12',
+                            'm-0', 'm-1', 'm-2', 'm-3', 'm-4', 'm-5', 'm-6', 'm-8', 'm-10', 'm-12'
+                        ],
+                        layout: [
+                            'block', 'inline-block', 'inline', 'flex', 'inline-flex', 'grid', 'inline-grid', 'hidden'
+                        ]
+                    };
+
+                    return tailwindOptions[groupName] || [];
+                }
+
+                return [];
+            }
+
+            setupAdvancedMenu(container) {
+                const advancedRow = container.querySelector('.advanced-row');
+                if (!advancedRow) return;
+
+                const advancedMenu = advancedRow.querySelector('.advanced-menu');
+
+                // Toggle advanced menu on click
+                const toggleAdvancedMenu = (e) => {
+                    e.stopPropagation();
+                    const isVisible = advancedMenu.classList.contains('show');
+
+                    // Hide all other advanced menus and submenus
+                    document.querySelectorAll('.advanced-menu.show').forEach(menu => {
+                        menu.classList.remove('show');
+                    });
+                    document.querySelectorAll('.class-submenu.show').forEach(submenu => {
+                        submenu.classList.remove('show');
+                    });
+
+                    if (!isVisible) {
+                        advancedMenu.classList.add('show');
+                    }
+                };
+
+                advancedRow.addEventListener('click', toggleAdvancedMenu);
+
+                // Handle individual class clicks
+                const individualClasses = advancedMenu.querySelectorAll('.individual-class');
+                individualClasses.forEach(classBtn => {
+                    classBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+
+                        const className = classBtn.dataset.class;
+                        const submenu = advancedMenu.querySelector(`[data-for="${className}"]`);
+
+                        // Hide all other submenus
+                        document.querySelectorAll('.class-submenu.show').forEach(menu => {
+                            if (menu !== submenu) {
+                                menu.classList.remove('show');
+                            }
+                        });
+
+                        // Toggle this submenu
+                        if (submenu) {
+                            submenu.classList.toggle('show');
+                        }
+                    });
+                });
+
+                // Handle submenu option clicks
+                const submenuOptions = advancedMenu.querySelectorAll('.class-submenu-option');
+                submenuOptions.forEach(option => {
+                    option.addEventListener('click', (e) => {
+                        e.stopPropagation();
+
+                        if (!option.classList.contains('current')) {
+                            const newClass = option.dataset.newClass;
+                            const oldClass = option.dataset.oldClass;
+
+                            if (this.selectedElement && oldClass && newClass) {
+                                // Remove old class and add new class
+                                this.selectedElement.classList.remove(oldClass);
+                                this.selectedElement.classList.add(newClass);
+
+                                // Update prompt
+                                this.updatePromptWithChange('class', `Replace ${oldClass} with ${newClass}`);
+
+                                // Refresh the advanced menu
+                                this.refreshAdvancedMenu(advancedMenu);
+                            }
+                        }
+                    });
+                });
+
+                // Prevent menu from closing when clicking inside
+                advancedMenu.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                });
+            }
+
+            refreshAdvancedMenu(advancedMenu) {
+                if (!this.selectedElement) return;
+
+                const classesDisplay = advancedMenu.querySelector('.element-classes-display');
+                const classesList = advancedMenu.querySelector('.individual-classes-list');
+
+                if (classesDisplay) {
+                    classesDisplay.innerHTML = this.getElementClasses(this.selectedElement);
+                }
+
+                if (classesList) {
+                    classesList.innerHTML = this.generateIndividualClassesList(this.selectedElement);
+
+                    // Re-add event listeners to new individual classes
+                    const individualClasses = classesList.querySelectorAll('.individual-class');
+                    individualClasses.forEach(classBtn => {
+                        classBtn.addEventListener('click', (e) => {
+                            e.stopPropagation();
+
+                            const className = classBtn.dataset.class;
+                            const submenu = classesList.querySelector(`[data-for="${className}"]`);
+
+                            // Hide all other submenus
+                            document.querySelectorAll('.class-submenu.show').forEach(menu => {
+                                if (menu !== submenu) {
+                                    menu.classList.remove('show');
+                                }
+                            });
+
+                            // Toggle this submenu
+                            if (submenu) {
+                                submenu.classList.toggle('show');
+                            }
+                        });
+                    });
+
+                    // Re-add event listeners to submenu options
+                    const submenuOptions = classesList.querySelectorAll('.class-submenu-option');
+                    submenuOptions.forEach(option => {
+                        option.addEventListener('click', (e) => {
+                            e.stopPropagation();
+
+                            if (!option.classList.contains('current')) {
+                                const newClass = option.dataset.newClass;
+                                const oldClass = option.dataset.oldClass;
+
+                                if (this.selectedElement && oldClass && newClass) {
+                                    this.selectedElement.classList.remove(oldClass);
+                                    this.selectedElement.classList.add(newClass);
+                                    this.updatePromptWithChange('class', `Replace ${oldClass} with ${newClass}`);
+                                    this.refreshAdvancedMenu(advancedMenu);
+                                }
+                            }
+                        });
+                    });
+                }
+            }
+
+            rgbToHex(rgb) {
+                // Handle transparent or rgba(0,0,0,0) cases
+                if (rgb === 'transparent' || rgb === 'rgba(0, 0, 0, 0)') {
+                    return '#ffffff';
+                }
+
+                // Handle hex colors (already in correct format)
+                if (rgb.startsWith('#')) {
+                    return rgb;
+                }
+
+                // Handle rgb() format
+                const rgbMatch = rgb.match(/rgb\((\d+),\s*(\d+),\s*(\d+)\)/);
+                if (rgbMatch) {
+                    const r = parseInt(rgbMatch[1]);
+                    const g = parseInt(rgbMatch[2]);
+                    const b = parseInt(rgbMatch[3]);
+                    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+                }
+
+                // Handle rgba() format
+                const rgbaMatch = rgb.match(/rgba\((\d+),\s*(\d+),\s*(\d+),\s*[\d.]+\)/);
+                if (rgbaMatch) {
+                    const r = parseInt(rgbaMatch[1]);
+                    const g = parseInt(rgbaMatch[2]);
+                    const b = parseInt(rgbaMatch[3]);
+                    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+                }
+
+                // Fallback to white
+                return '#ffffff';
+            }
+
+            getFontWeightLabel(weight) {
+                const weightMap = {
+                    '100': 'Thin',
+                    '200': 'Extra Light',
+                    '300': 'Light',
+                    '400': 'Normal',
+                    '500': 'Medium',
+                    '600': 'Semi Bold',
+                    '700': 'Bold',
+                    '800': 'Extra Bold',
+                    '900': 'Black'
+                };
+                return weightMap[weight] || 'Normal';
+            }
+
+            getTextAlignLabel(align) {
+                const alignMap = {
+                    'left': 'Left',
+                    'center': 'Center',
+                    'right': 'Right',
+                    'justify': 'Justify',
+                    'start': 'Left',
+                    'end': 'Right'
+                };
+                return alignMap[align] || 'Left';
+            }
+
+            getBorderRadiusLabel(radiusValue) {
+                const labelMap = {
+                    '0': 'None',
+                    '2': 'Small',
+                    '4': 'Default',
+                    '6': 'Medium',
+                    '8': 'Large',
+                    '12': 'XL',
+                    '16': '2XL',
+                    '24': '3XL',
+                    '50': 'Full',
+                    '9999': 'Full'
+                };
+
+                return labelMap[radiusValue] || `${radiusValue}px`;
+            }
+
+            generateFontWeightOptions(currentWeight) {
+                const weights = [
+                    { value: '100', label: 'Thin' },
+                    { value: '200', label: 'Extra Light' },
+                    { value: '300', label: 'Light' },
+                    { value: '400', label: 'Normal' },
+                    { value: '500', label: 'Medium' },
+                    { value: '600', label: 'Semi Bold' },
+                    { value: '700', label: 'Bold' },
+                    { value: '800', label: 'Extra Bold' },
+                    { value: '900', label: 'Black' }
+                ];
+
+                return weights.map(weight => `
+                    <div class="weight-option ${weight.value === currentWeight ? 'selected' : ''}" 
+                         data-value="${weight.value}" data-label="${weight.label}">
+                        ${weight.label}
+                        <svg class="weight-option-check" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+                        </svg>
+                    </div>
+                `).join('');
+            }
+
+            generateTextAlignOptions(currentAlign) {
+                const alignments = [
+                    { value: 'left', label: 'Left' },
+                    { value: 'center', label: 'Center' },
+                    { value: 'right', label: 'Right' },
+                    { value: 'justify', label: 'Justify' }
+                ];
+
+                return alignments.map(align => `
+                    <div class="align-option ${align.value === currentAlign || (currentAlign === 'start' && align.value === 'left') ? 'selected' : ''}" 
+                         data-value="${align.value}" data-label="${align.label}">
+                        ${align.label}
+                        <svg class="align-option-check" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+                        </svg>
+                    </div>
+                `).join('');
+            }
+
+            generateFontSizeOptions(framework, currentSize) {
+                const frameworks = {
+                    tailwind: [
+                        { label: 'XS', value: '12', class: 'text-xs' },
+                        { label: 'SM', value: '14', class: 'text-sm' },
+                        { label: 'Base', value: '16', class: 'text-base' },
+                        { label: 'LG', value: '18', class: 'text-lg' },
+                        { label: 'XL', value: '20', class: 'text-xl' },
+                        { label: '2XL', value: '24', class: 'text-2xl' },
+                        { label: '3XL', value: '30', class: 'text-3xl' },
+                        { label: '4XL', value: '36', class: 'text-4xl' },
+                        { label: '5XL', value: '48', class: 'text-5xl' },
+                        { label: '6XL', value: '60', class: 'text-6xl' },
+                        { label: '7XL', value: '72', class: 'text-7xl' },
+                        { label: '8XL', value: '96', class: 'text-8xl' },
+                        { label: '9XL', value: '128', class: 'text-9xl' }
+                    ],
+                    bootstrap: [
+                        { label: 'Small', value: '14', class: 'fs-6' },
+                        { label: 'Normal', value: '16', class: 'fs-5' },
+                        { label: 'Large', value: '20', class: 'fs-4' },
+                        { label: 'H6', value: '16', class: 'h6' },
+                        { label: 'H5', value: '20', class: 'h5' },
+                        { label: 'H4', value: '24', class: 'h4' },
+                        { label: 'H3', value: '28', class: 'h3' },
+                        { label: 'H2', value: '32', class: 'h2' },
+                        { label: 'H1', value: '40', class: 'h1' },
+                        { label: 'Display 6', value: '48', class: 'display-6' },
+                        { label: 'Display 5', value: '56', class: 'display-5' },
+                        { label: 'Display 4', value: '64', class: 'display-4' }
+                    ],
+                    material: [
+                        { label: 'Caption', value: '12', class: 'MuiTypography-caption' },
+                        { label: 'Body 2', value: '14', class: 'MuiTypography-body2' },
+                        { label: 'Body 1', value: '16', class: 'MuiTypography-body1' },
+                        { label: 'Subtitle 2', value: '14', class: 'MuiTypography-subtitle2' },
+                        { label: 'Subtitle 1', value: '16', class: 'MuiTypography-subtitle1' },
+                        { label: 'H6', value: '20', class: 'MuiTypography-h6' },
+                        { label: 'H5', value: '24', class: 'MuiTypography-h5' },
+                        { label: 'H4', value: '34', class: 'MuiTypography-h4' },
+                        { label: 'H3', value: '48', class: 'MuiTypography-h3' },
+                        { label: 'H2', value: '60', class: 'MuiTypography-h2' },
+                        { label: 'H1', value: '96', class: 'MuiTypography-h1' }
+                    ],
+                    chakra: [
+                        { label: 'XS', value: '12', class: 'chakra-text--xs' },
+                        { label: 'SM', value: '14', class: 'chakra-text--sm' },
+                        { label: 'MD', value: '16', class: 'chakra-text--md' },
+                        { label: 'LG', value: '18', class: 'chakra-text--lg' },
+                        { label: 'XL', value: '20', class: 'chakra-text--xl' },
+                        { label: '2XL', value: '24', class: 'chakra-text--2xl' },
+                        { label: '3XL', value: '30', class: 'chakra-text--3xl' },
+                        { label: '4XL', value: '36', class: 'chakra-text--4xl' },
+                        { label: '5XL', value: '48', class: 'chakra-text--5xl' },
+                        { label: '6XL', value: '60', class: 'chakra-text--6xl' }
+                    ],
+                    css: [
+                        { label: '10px', value: '10' },
+                        { label: '12px', value: '12' },
+                        { label: '14px', value: '14' },
+                        { label: '16px', value: '16' },
+                        { label: '18px', value: '18' },
+                        { label: '20px', value: '20' },
+                        { label: '24px', value: '24' },
+                        { label: '28px', value: '28' },
+                        { label: '32px', value: '32' },
+                        { label: '36px', value: '36' },
+                        { label: '48px', value: '48' },
+                        { label: '60px', value: '60' },
+                        { label: '72px', value: '72' }
+                    ]
+                };
+
+                const options = frameworks[framework] || frameworks.css;
+                const currentSizeNum = currentSize.replace('px', '');
+
+                return options.map(option => {
+                    const isSelected = option.value === currentSizeNum;
+                    return `
+                        <div class="size-option ${isSelected ? 'selected' : ''}" 
+                             data-value="${option.value}" 
+                             data-label="${option.label}"
+                             ${option.class ? `data-class="${option.class}"` : ''}>
+                            <span>${option.label}</span>
+                            <svg class="size-option-check" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                                <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
+                            </svg>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            getFontSizeLabel(size, framework) {
+                const sizeNum = size.replace('px', '');
+
+                if (framework === 'tailwind') {
+                    const sizeMap = {
+                        '12': 'XS', '14': 'SM', '16': 'Base', '18': 'LG', '20': 'XL',
+                        '24': '2XL', '30': '3XL', '36': '4XL', '48': '5XL', '60': '6XL',
+                        '72': '7XL', '96': '8XL', '128': '9XL'
+                    };
+                    return sizeMap[sizeNum] || `${sizeNum}px`;
+                } else if (framework === 'bootstrap') {
+                    const sizeMap = {
+                        '14': 'Small', '16': 'Normal', '20': 'Large', '24': 'H4',
+                        '28': 'H3', '32': 'H2', '40': 'H1', '48': 'Display 6'
+                    };
+                    return sizeMap[sizeNum] || `${sizeNum}px`;
+                } else if (framework === 'material') {
+                    const sizeMap = {
+                        '12': 'Caption', '14': 'Body 2', '16': 'Body 1', '20': 'H6',
+                        '24': 'H5', '34': 'H4', '48': 'H3', '60': 'H2', '96': 'H1'
+                    };
+                    return sizeMap[sizeNum] || `${sizeNum}px`;
+                }
+
+                return `${sizeNum}px`;
+            }
+
+            detectFramework() {
+                // Try to detect framework from the iframe document
+                let targetDoc = document;
+                try {
+                    if (this.iframe && this.iframe.contentDocument) {
+                        targetDoc = this.iframe.contentDocument;
+                    }
+                } catch (e) {
+                    // Cross-origin, use main document
+                    targetDoc = document;
+                }
+
+                const html = targetDoc.documentElement;
+                const body = targetDoc.body;
+
+                // Check for Tailwind CSS
+                if (html.classList.contains('tailwind') ||
+                    body.classList.contains('tailwind') ||
+                    targetDoc.querySelector('[class*="tw-"]') ||
+                    targetDoc.querySelector('[class*="bg-"]') ||
+                    targetDoc.querySelector('[class*="text-"]') ||
+                    targetDoc.querySelector('link[href*="tailwind"]') ||
+                    targetDoc.querySelector('script[src*="tailwind"]')) {
+                    return 'tailwind';
+                }
+
+                // Check for Bootstrap
+                if (html.classList.contains('bootstrap') ||
+                    body.classList.contains('bootstrap') ||
+                    targetDoc.querySelector('[class*="btn-"]') ||
+                    targetDoc.querySelector('[class*="col-"]') ||
+                    targetDoc.querySelector('link[href*="bootstrap"]') ||
+                    targetDoc.querySelector('script[src*="bootstrap"]')) {
+                    return 'bootstrap';
+                }
+
+                // Check for Material-UI/MUI
+                if (targetDoc.querySelector('[class*="MuiButton"]') ||
+                    targetDoc.querySelector('[class*="Mui"]') ||
+                    targetDoc.querySelector('link[href*="material"]')) {
+                    return 'material';
+                }
+
+                // Check for Chakra UI
+                if (targetDoc.querySelector('[class*="chakra"]') ||
+                    targetDoc.querySelector('[data-theme*="chakra"]')) {
+                    return 'chakra';
+                }
+
+                // Default to CSS/generic
+                return 'css';
+            }
+
+            getColorName(color) {
+                // Convert common colors to names
+                const colorNames = {
+                    '#ffffff': 'white',
+                    '#000000': 'black',
+                    '#ff0000': 'red',
+                    '#00ff00': 'green',
+                    '#0000ff': 'blue',
+                    '#ffff00': 'yellow',
+                    '#ff00ff': 'magenta',
+                    '#00ffff': 'cyan',
+                    '#808080': 'gray',
+                    '#c0c0c0': 'silver'
+                };
+
+                const hex = this.rgbToHex(color).toLowerCase();
+                return colorNames[hex] || hex;
+            }
+
+            getBorderRadiusLabel(value) {
+                const num = parseInt(value);
+
+                // Map pixel values to framework-agnostic labels that match dropdown options
+                if (num === 0) return 'None';
+                if (num <= 2) return 'Small';
+                if (num <= 4) return 'Default';
+                if (num <= 6) return 'Medium';
+                if (num <= 8) return 'Large';
+                if (num <= 12) return 'XL';
+                if (num <= 16) return '2XL';
+                if (num <= 24) return '3XL';
+                if (num >= 50) return 'Full';
+
+                return `${value}px`;
+            }
+
+            async sendFloatingPrompt() {
+                const prompt = document.getElementById('floating-prompt-text').value.trim();
+                if (!prompt || !this.selectedElement) return;
+
+                const sendBtn = document.getElementById('floating-send');
+                const originalText = sendBtn.textContent;
+                sendBtn.disabled = true;
+                sendBtn.textContent = 'Sending...';
+
+                try {
+                    const elementContext = {
+                        tagName: this.selectedElement.tagName.toLowerCase(),
+                        id: this.selectedElement.id || null,
+                        className: this.selectedElement.className || null,
+                        textContent: this.selectedElement.textContent?.trim().substring(0, 200) || null,
+                        innerHTML: this.selectedElement.innerHTML?.substring(0, 500) || null,
+                        boundingRect: this.selectedElement.getBoundingClientRect()
+                    };
+
+                    const message = {
+                        message: prompt,
+                        source: 'ai-visual-dev-tool',
+                        metadata: {
+                            url: document.getElementById('page-selector').value,
+                            userAgent: navigator.userAgent,
+                            selectedElement: elementContext,
+                            timestamp: new Date().toISOString()
+                        }
+                    };
+
+                    const response = await fetch(`${this.mcpServerUrl}/send-message`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(message)
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        sendBtn.textContent = '✅ Sent!';
+                        sendBtn.className = 'btn-small btn-send';
+
+                        // Hide prompt after short delay
+                        setTimeout(() => {
+                            this.hideFloatingPrompt();
+                        }, 1500);
+
+                        // Show instruction
+                        console.log('Message sent to Kiro! Trigger the "Browser Message Responder" hook to see your message.');
+
+                    } else {
+                        throw new Error(result.error || 'Failed to send message');
+                    }
+                } catch (error) {
+                    console.error('Failed to send message:', error.message);
+
+                    // Show user-friendly error message
+                    sendBtn.textContent = '❌ Server Offline';
+                    sendBtn.className = 'btn-small btn-send';
+
+                    // Copy message to clipboard as fallback
+                    try {
+                        await navigator.clipboard.writeText(prompt);
+                        console.log('Message copied to clipboard as fallback');
+
+                        // Show helpful message
+                        setTimeout(() => {
+                            alert('MCP server is offline. Your message has been copied to clipboard:\n\n' + prompt);
+                        }, 100);
+                    } catch (clipboardError) {
+                        alert('MCP server is offline. Please ensure the server is running at ' + this.mcpServerUrl);
+                    }
+
+                    // Reset button after delay
+                    setTimeout(() => {
+                        sendBtn.textContent = originalText;
+                        sendBtn.disabled = false;
+                    }, 2000);
+                }
             }
 
             async sendToKiro() {
@@ -522,7 +3907,7 @@ Examples:
                         message: prompt,
                         source: 'ai-visual-dev-tool',
                         metadata: {
-                            url: document.getElementById('url-input').value,
+                            url: document.getElementById('page-selector').value,
                             userAgent: navigator.userAgent,
                             selectedElement: elementContext,
                             timestamp: new Date().toISOString()
@@ -543,13 +3928,13 @@ Examples:
                         // Show success feedback
                         sendBtn.textContent = '✅ Sent!';
                         sendBtn.className = 'btn btn-success';
-                        
+
                         // Clear the prompt
                         this.clearPrompt();
-                        
+
                         // Show instruction
                         alert('Message sent to Kiro! Now trigger the "Browser Message Responder" hook in Kiro to see your message.');
-                        
+
                         setTimeout(() => {
                             sendBtn.textContent = originalText;
                             sendBtn.className = 'btn btn-success';
@@ -559,10 +3944,537 @@ Examples:
                         throw new Error(result.error || 'Failed to send message');
                     }
                 } catch (error) {
-                    alert(`Failed to send message: ${error.message}`);
-                    sendBtn.textContent = originalText;
-                    sendBtn.disabled = false;
+                    console.error('Failed to send message:', error.message);
+
+                    // Show user-friendly error message
+                    sendBtn.textContent = '❌ Server Offline';
+                    sendBtn.className = 'btn btn-danger';
+
+                    // Copy message to clipboard as fallback
+                    try {
+                        await navigator.clipboard.writeText(prompt);
+                        console.log('Message copied to clipboard as fallback');
+
+                        // Show helpful message
+                        setTimeout(() => {
+                            alert('MCP server is offline. Your message has been copied to clipboard:\n\n' + prompt + '\n\nYou can paste this into Kiro manually.');
+                        }, 100);
+                    } catch (clipboardError) {
+                        alert('MCP server is offline. Please ensure the MCP server is running at ' + this.mcpServerUrl + '\n\nOr copy your message manually:\n\n' + prompt);
+                    }
+
+                    // Reset button after delay
+                    setTimeout(() => {
+                        sendBtn.textContent = originalText;
+                        sendBtn.className = 'btn btn-success';
+                        sendBtn.disabled = false;
+                    }, 3000);
                 }
+            }
+
+            setupBackgroundColorChipOptions(chip, dropdown) {
+                const chipValue = chip.querySelector('.chip-value');
+                const chipColorPreview = chip.querySelector('.chip-color-preview');
+
+                // Setup color palette items
+                const paletteItems = dropdown.querySelectorAll('.color-palette-item');
+                paletteItems.forEach(item => {
+                    item.addEventListener('click', (e) => {
+                        e.stopPropagation();
+
+                        const color = item.dataset.color;
+                        this.applyColorToChip(color, chip, chipValue, chipColorPreview, dropdown);
+                    });
+                });
+
+                // Setup custom color input
+                const customColorInput = dropdown.querySelector('.custom-color-input');
+                if (customColorInput) {
+                    customColorInput.addEventListener('input', (e) => {
+                        const color = e.target.value;
+                        this.applyColorToChip(color, chip, chipValue, chipColorPreview, dropdown);
+                    });
+                }
+
+                // Setup tabs
+                const tabs = dropdown.querySelectorAll('.color-picker-tab');
+                const stylesSection = dropdown.querySelector('.styles-section');
+                const customSection = dropdown.querySelector('.custom-color-section');
+
+                tabs.forEach(tab => {
+                    tab.addEventListener('click', (e) => {
+                        e.stopPropagation();
+
+                        tabs.forEach(t => t.classList.remove('active'));
+                        tab.classList.add('active');
+
+                        if (tab.dataset.tab === 'styles') {
+                            stylesSection.style.display = 'block';
+                            customSection.classList.remove('active');
+                        } else {
+                            stylesSection.style.display = 'none';
+                            customSection.classList.add('active');
+                        }
+                    });
+                });
+            }
+
+            setupBorderRadiusChipOptions(chip, dropdown) {
+                const options = dropdown.querySelectorAll('.radius-option');
+                const chipValue = chip.querySelector('.chip-value');
+
+                options.forEach(option => {
+                    option.addEventListener('click', (e) => {
+                        e.stopPropagation();
+
+                        const value = option.dataset.value;
+                        const label = option.dataset.label;
+                        const cssClass = option.dataset.class;
+
+                        // Update chip display
+                        chipValue.textContent = label;
+
+                        // Update selected state
+                        options.forEach(opt => opt.classList.remove('selected'));
+                        option.classList.add('selected');
+
+                        // Apply to element
+                        if (this.selectedElement) {
+                            this.selectedElement.style.borderRadius = value + 'px';
+
+                            // Handle framework classes
+                            if (cssClass) {
+                                const framework = chip.dataset.framework;
+                                if (framework === 'tailwind') {
+                                    this.selectedElement.className = this.selectedElement.className
+                                        .replace(/rounded-\w+/g, '')
+                                        .replace(/rounded/g, '')
+                                        .trim();
+                                } else if (framework === 'bootstrap') {
+                                    this.selectedElement.className = this.selectedElement.className
+                                        .replace(/rounded-[0-5]|rounded-pill/g, '')
+                                        .trim();
+                                }
+                                this.selectedElement.classList.add(cssClass);
+                            }
+
+                            this.updatePromptWithChange('borderRadius', `${label} (${value}px)`);
+                        }
+
+                        // Close dropdown
+                        dropdown.classList.remove('show');
+                        chip.classList.remove('active');
+                    });
+                });
+            }
+
+            setupClassesTextarea(container) {
+                const textarea = container.querySelector('#classes-textarea');
+
+                if (!textarea) return;
+
+                // Create autocomplete dropdown
+                const autocomplete = document.createElement('div');
+                autocomplete.className = 'class-autocomplete';
+                autocomplete.id = 'class-autocomplete';
+                container.appendChild(autocomplete);
+
+
+
+                // Handle clicks in textarea for autocomplete
+                textarea.addEventListener('click', (e) => {
+                    this.handleTextareaClick(e, textarea, autocomplete);
+                });
+
+                // Handle keyboard navigation in autocomplete
+                textarea.addEventListener('keydown', (e) => {
+                    if (autocomplete.classList.contains('show')) {
+                        if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+                            e.preventDefault();
+                            this.navigateAutocomplete(e.key, autocomplete);
+                            return;
+                        } else if (e.key === 'Enter' && !e.ctrlKey && !e.shiftKey) {
+                            e.preventDefault();
+                            this.selectAutocompleteOption(autocomplete, textarea);
+                            return;
+                        } else if (e.key === 'Escape') {
+                            this.hideAutocomplete(autocomplete);
+                            return;
+                        }
+                    }
+
+                    // Close autocomplete on Enter (Ctrl+Enter for new line)
+                    if (e.key === 'Enter' && !e.ctrlKey && !e.shiftKey) {
+                        e.preventDefault();
+                        if (autocomplete.classList.contains('show')) {
+                            this.hideAutocomplete(autocomplete);
+                        }
+                    }
+                });
+
+                // Hide autocomplete when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!container.contains(e.target)) {
+                        this.hideAutocomplete(autocomplete);
+                    }
+                });
+            }
+
+            getFontSizeClass(fontSize, framework) {
+                const sizeNum = fontSize.replace('px', '');
+                if (framework === 'tailwind') {
+                    const sizeMap = {
+                        '12': 'text-xs', '14': 'text-sm', '16': 'text-base', '18': 'text-lg', '20': 'text-xl',
+                        '24': 'text-2xl', '30': 'text-3xl', '36': 'text-4xl', '48': 'text-5xl', '60': 'text-6xl',
+                        '72': 'text-7xl', '96': 'text-8xl', '128': 'text-9xl'
+                    };
+                    return sizeMap[sizeNum];
+                }
+                return null;
+            }
+
+            getFontWeightClass(fontWeight, framework) {
+                if (framework === 'tailwind') {
+                    const weightMap = {
+                        '100': 'font-thin', '200': 'font-extralight', '300': 'font-light', '400': 'font-normal',
+                        '500': 'font-medium', '600': 'font-semibold', '700': 'font-bold', '800': 'font-extrabold', '900': 'font-black'
+                    };
+                    return weightMap[fontWeight];
+                }
+                return null;
+            }
+
+            getTextColorClass(color, framework) {
+                if (framework === 'tailwind') {
+                    const colorMap = {
+                        'rgb(0, 0, 0)': 'text-black', 'black': 'text-black',
+                        'rgb(255, 255, 255)': 'text-white', 'white': 'text-white',
+                        'rgb(107, 114, 128)': 'text-gray-500', 'rgb(75, 85, 99)': 'text-gray-600',
+                        'rgb(55, 65, 81)': 'text-gray-700', 'rgb(31, 41, 55)': 'text-gray-800'
+                    };
+                    return colorMap[color];
+                }
+                return null;
+            }
+
+            getTextAlignClass(textAlign, framework) {
+                if (framework === 'tailwind') {
+                    const alignMap = {
+                        'left': 'text-left', 'center': 'text-center', 'right': 'text-right', 'justify': 'text-justify',
+                        'start': 'text-left', 'end': 'text-right'
+                    };
+                    return alignMap[textAlign];
+                }
+                return null;
+            }
+
+            getBackgroundColorClass(backgroundColor, framework) {
+                if (framework === 'tailwind') {
+                    const colorMap = {
+                        'rgb(255, 255, 255)': 'bg-white', 'white': 'bg-white',
+                        'rgb(0, 0, 0)': 'bg-black', 'black': 'bg-black',
+                        'rgb(249, 250, 251)': 'bg-gray-50', 'rgb(243, 244, 246)': 'bg-gray-100',
+                        'rgb(229, 231, 235)': 'bg-gray-200', 'rgb(209, 213, 219)': 'bg-gray-300'
+                    };
+                    return colorMap[backgroundColor];
+                }
+                return null;
+            }
+
+            getBorderRadiusClass(radiusValue, framework) {
+                if (framework === 'tailwind') {
+                    const radiusMap = {
+                        '0': 'rounded-none', '2': 'rounded-sm', '4': 'rounded', '6': 'rounded-md',
+                        '8': 'rounded-lg', '12': 'rounded-xl', '16': 'rounded-2xl', '24': 'rounded-3xl',
+                        '50': 'rounded-full', '9999': 'rounded-full'
+                    };
+                    return radiusMap[radiusValue];
+                }
+                return null;
+            }
+
+            handleTextareaClick(e, textarea, autocomplete) {
+                const cursorPos = textarea.selectionStart;
+                const text = textarea.value;
+
+                // Find the word at cursor position
+                const wordMatch = this.getWordAtPosition(text, cursorPos);
+                if (!wordMatch) {
+                    this.hideAutocomplete(autocomplete);
+                    return;
+                }
+
+                const { word, start, end } = wordMatch;
+                const framework = this.detectFramework();
+                const suggestions = this.getClassSuggestions(word, framework);
+
+                if (suggestions.length > 0) {
+                    this.showAutocomplete(autocomplete, suggestions, textarea, start, end, word);
+                } else {
+                    this.hideAutocomplete(autocomplete);
+                }
+            }
+
+            getWordAtPosition(text, position) {
+                // Find word boundaries (spaces, newlines, tabs)
+                let start = position;
+                let end = position;
+
+                // Find start of word
+                while (start > 0 && !/\s/.test(text[start - 1])) {
+                    start--;
+                }
+
+                // Find end of word
+                while (end < text.length && !/\s/.test(text[end])) {
+                    end++;
+                }
+
+                const word = text.substring(start, end);
+                return word.trim() ? { word: word.trim(), start, end } : null;
+            }
+
+            getClassSuggestions(className, framework) {
+                if (framework !== 'tailwind') return [];
+
+                // Background color suggestions
+                if (className.startsWith('bg-')) {
+                    return [
+                        { class: 'bg-white', preview: '#ffffff', category: 'Background Colors' },
+                        { class: 'bg-black', preview: '#000000', category: 'Background Colors' },
+                        { class: 'bg-gray-50', preview: '#f9fafb', category: 'Background Colors' },
+                        { class: 'bg-gray-100', preview: '#f3f4f6', category: 'Background Colors' },
+                        { class: 'bg-gray-200', preview: '#e5e7eb', category: 'Background Colors' },
+                        { class: 'bg-gray-300', preview: '#d1d5db', category: 'Background Colors' },
+                        { class: 'bg-gray-500', preview: '#6b7280', category: 'Background Colors' },
+                        { class: 'bg-gray-800', preview: '#1f2937', category: 'Background Colors' },
+                        { class: 'bg-blue-500', preview: '#3b82f6', category: 'Background Colors' },
+                        { class: 'bg-red-500', preview: '#ef4444', category: 'Background Colors' },
+                        { class: 'bg-green-500', preview: '#10b981', category: 'Background Colors' },
+                        { class: 'bg-yellow-500', preview: '#f59e0b', category: 'Background Colors' },
+                        { class: 'bg-purple-500', preview: '#8b5cf6', category: 'Background Colors' },
+                        { class: 'bg-transparent', preview: 'transparent', category: 'Background Colors' }
+                    ];
+                }
+
+                // Text color suggestions
+                if (className.startsWith('text-') && !className.includes('xs') && !className.includes('sm') && !className.includes('base') && !className.includes('lg') && !className.includes('xl') && !className.includes('left') && !className.includes('center') && !className.includes('right') && !className.includes('justify')) {
+                    return [
+                        { class: 'text-black', preview: '#000000', category: 'Text Colors' },
+                        { class: 'text-white', preview: '#ffffff', category: 'Text Colors' },
+                        { class: 'text-gray-400', preview: '#9ca3af', category: 'Text Colors' },
+                        { class: 'text-gray-500', preview: '#6b7280', category: 'Text Colors' },
+                        { class: 'text-gray-600', preview: '#4b5563', category: 'Text Colors' },
+                        { class: 'text-gray-700', preview: '#374151', category: 'Text Colors' },
+                        { class: 'text-gray-800', preview: '#1f2937', category: 'Text Colors' },
+                        { class: 'text-red-500', preview: '#ef4444', category: 'Text Colors' },
+                        { class: 'text-blue-500', preview: '#3b82f6', category: 'Text Colors' },
+                        { class: 'text-green-500', preview: '#10b981', category: 'Text Colors' },
+                        { class: 'text-yellow-500', preview: '#f59e0b', category: 'Text Colors' },
+                        { class: 'text-purple-500', preview: '#8b5cf6', category: 'Text Colors' },
+                        { class: 'text-pink-500', preview: '#ec4899', category: 'Text Colors' },
+                        { class: 'text-indigo-500', preview: '#6366f1', category: 'Text Colors' }
+                    ];
+                }
+
+                // Text alignment suggestions
+                if (className.startsWith('text-') && (className.includes('left') || className.includes('center') || className.includes('right') || className.includes('justify'))) {
+                    return [
+                        { class: 'text-left', category: 'Text Alignment' },
+                        { class: 'text-center', category: 'Text Alignment' },
+                        { class: 'text-right', category: 'Text Alignment' },
+                        { class: 'text-justify', category: 'Text Alignment' }
+                    ];
+                }
+
+                // Text size suggestions
+                if (className.startsWith('text-') && (className.includes('xs') || className.includes('sm') || className.includes('base') || className.includes('lg') || className.includes('xl'))) {
+                    return [
+                        { class: 'text-xs', category: 'Font Sizes' },
+                        { class: 'text-sm', category: 'Font Sizes' },
+                        { class: 'text-base', category: 'Font Sizes' },
+                        { class: 'text-lg', category: 'Font Sizes' },
+                        { class: 'text-xl', category: 'Font Sizes' },
+                        { class: 'text-2xl', category: 'Font Sizes' },
+                        { class: 'text-3xl', category: 'Font Sizes' },
+                        { class: 'text-4xl', category: 'Font Sizes' },
+                        { class: 'text-5xl', category: 'Font Sizes' },
+                        { class: 'text-6xl', category: 'Font Sizes' }
+                    ];
+                }
+
+                // Font weight suggestions
+                if (className.startsWith('font-')) {
+                    return [
+                        { class: 'font-thin', category: 'Font Weights' },
+                        { class: 'font-light', category: 'Font Weights' },
+                        { class: 'font-normal', category: 'Font Weights' },
+                        { class: 'font-medium', category: 'Font Weights' },
+                        { class: 'font-semibold', category: 'Font Weights' },
+                        { class: 'font-bold', category: 'Font Weights' },
+                        { class: 'font-extrabold', category: 'Font Weights' },
+                        { class: 'font-black', category: 'Font Weights' }
+                    ];
+                }
+
+                // Border radius suggestions
+                if (className.startsWith('rounded')) {
+                    return [
+                        { class: 'rounded-none', category: 'Border Radius' },
+                        { class: 'rounded-sm', category: 'Border Radius' },
+                        { class: 'rounded', category: 'Border Radius' },
+                        { class: 'rounded-md', category: 'Border Radius' },
+                        { class: 'rounded-lg', category: 'Border Radius' },
+                        { class: 'rounded-xl', category: 'Border Radius' },
+                        { class: 'rounded-2xl', category: 'Border Radius' },
+                        { class: 'rounded-3xl', category: 'Border Radius' },
+                        { class: 'rounded-full', category: 'Border Radius' }
+                    ];
+                }
+
+                // Padding suggestions
+                if (className.startsWith('p-') || className.startsWith('px-') || className.startsWith('py-')) {
+                    return [
+                        { class: 'p-0', category: 'Padding' },
+                        { class: 'p-1', category: 'Padding' },
+                        { class: 'p-2', category: 'Padding' },
+                        { class: 'p-4', category: 'Padding' },
+                        { class: 'p-6', category: 'Padding' },
+                        { class: 'p-8', category: 'Padding' },
+                        { class: 'px-4', category: 'Padding' },
+                        { class: 'py-2', category: 'Padding' },
+                        { class: 'py-4', category: 'Padding' }
+                    ];
+                }
+
+                return [];
+            }
+
+            showAutocomplete(autocomplete, suggestions, textarea, start, end, currentWord) {
+                const rect = textarea.getBoundingClientRect();
+                const container = textarea.parentElement;
+
+                // Position autocomplete below textarea
+                autocomplete.style.top = (rect.height + 8) + 'px';
+                autocomplete.style.left = '0px';
+
+                // Find the index of the current class in suggestions
+                let selectedIndex = 0;
+                const currentClassIndex = suggestions.findIndex(suggestion =>
+                    suggestion.class === currentWord
+                );
+                if (currentClassIndex !== -1) {
+                    selectedIndex = currentClassIndex;
+                }
+
+                // Generate HTML for suggestions
+                let html = '';
+                if (suggestions.length > 0) {
+                    const category = suggestions[0].category;
+                    html += `<div class="autocomplete-header">${category}</div>`;
+
+                    suggestions.forEach((suggestion, index) => {
+                        const isSelected = index === selectedIndex ? 'selected' : '';
+                        const preview = suggestion.preview ?
+                            `<div class="class-preview" style="background-color: ${suggestion.preview}"></div>` : '';
+
+                        html += `
+                            <div class="autocomplete-option ${isSelected}" data-class="${suggestion.class}" data-index="${index}">
+                                ${preview}${suggestion.class}
+                            </div>
+                        `;
+                    });
+                }
+
+                autocomplete.innerHTML = html;
+                autocomplete.classList.add('show');
+
+                // Store current selection info
+                autocomplete.dataset.start = start;
+                autocomplete.dataset.end = end;
+                autocomplete.dataset.selectedIndex = selectedIndex.toString();
+
+                // Add click handlers
+                const options = autocomplete.querySelectorAll('.autocomplete-option');
+                options.forEach(option => {
+                    option.addEventListener('click', () => {
+                        this.replaceClassInTextarea(textarea, option.dataset.class, start, end);
+                        this.hideAutocomplete(autocomplete);
+
+                        // Apply classes immediately to the selected element
+                        const classes = textarea.value.trim();
+                        if (this.selectedElement && classes) {
+                            this.selectedElement.className = classes;
+                            this.updatePromptWithChange('className', classes);
+                        }
+                    });
+                });
+
+                // Scroll selected option into view
+                const selectedOption = options[selectedIndex];
+                if (selectedOption) {
+                    selectedOption.scrollIntoView({ block: 'nearest' });
+                }
+            }
+
+            navigateAutocomplete(direction, autocomplete) {
+                const options = autocomplete.querySelectorAll('.autocomplete-option');
+                if (options.length === 0) return;
+
+                const currentIndex = parseInt(autocomplete.dataset.selectedIndex || '0');
+                let newIndex;
+
+                if (direction === 'ArrowDown') {
+                    newIndex = (currentIndex + 1) % options.length;
+                } else {
+                    newIndex = currentIndex === 0 ? options.length - 1 : currentIndex - 1;
+                }
+
+                // Update selection
+                options[currentIndex].classList.remove('selected');
+                options[newIndex].classList.add('selected');
+                autocomplete.dataset.selectedIndex = newIndex.toString();
+
+                // Scroll into view
+                options[newIndex].scrollIntoView({ block: 'nearest' });
+            }
+
+            selectAutocompleteOption(autocomplete, textarea) {
+                const selectedOption = autocomplete.querySelector('.autocomplete-option.selected');
+                if (selectedOption) {
+                    const start = parseInt(autocomplete.dataset.start);
+                    const end = parseInt(autocomplete.dataset.end);
+                    this.replaceClassInTextarea(textarea, selectedOption.dataset.class, start, end);
+                    this.hideAutocomplete(autocomplete);
+
+                    // Apply classes immediately to the selected element
+                    const classes = textarea.value.trim();
+                    if (this.selectedElement && classes) {
+                        this.selectedElement.className = classes;
+                        this.updatePromptWithChange('className', classes);
+                    }
+                }
+            }
+
+            replaceClassInTextarea(textarea, newClass, start, end) {
+                const text = textarea.value;
+                let newText = text.substring(0, start) + newClass + text.substring(end);
+
+                // Ensure proper spacing between classes
+                // Clean up multiple spaces and normalize spacing
+                newText = newText.replace(/\s+/g, ' ').trim();
+
+                textarea.value = newText;
+
+                // Set cursor position after the new class
+                const newCursorPos = start + newClass.length;
+                textarea.setSelectionRange(newCursorPos, newCursorPos);
+                textarea.focus();
+            }
+
+            hideAutocomplete(autocomplete) {
+                autocomplete.classList.remove('show');
+                autocomplete.innerHTML = '';
             }
         }
 
@@ -572,4 +4484,5 @@ Examples:
         });
     </script>
 </body>
+
 </html>
