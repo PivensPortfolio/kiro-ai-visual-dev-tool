@@ -1778,9 +1778,16 @@ Examples:
                     return;
                 }
 
-                // Convert relative path to full URL
-                const baseUrl = window.location.origin;
-                const url = selectedPath.startsWith('/') ? `${baseUrl}${selectedPath}` : `${baseUrl}/${selectedPath}`;
+                let url;
+                
+                // Check if it's already a full URL (starts with http:// or https://)
+                if (selectedPath.startsWith('http://') || selectedPath.startsWith('https://')) {
+                    url = selectedPath;
+                } else {
+                    // Convert relative path to full URL for AI tool pages
+                    const baseUrl = window.location.origin;
+                    url = selectedPath.startsWith('/') ? `${baseUrl}${selectedPath}` : `${baseUrl}/${selectedPath}`;
+                }
 
                 const loading = document.getElementById('loading');
                 loading.style.display = 'flex';
