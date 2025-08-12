@@ -1,180 +1,187 @@
-# Kiro AI Visual Dev Tool Bundle
+# 🎯 Kiro AI Visual Dev Tool
 
-**A complete AI-powered visual development tool** that bridges your browser with Kiro IDE's AI capabilities.
+A powerful visual development tool that enables AI-assisted element inspection and modification for web applications. Now with **full cross-origin support** for external applications!
 
-This bundle provides:
-- 🎯 **Visual Element Inspector** - Click and analyze any element on any webpage
-- 🤖 **AI-Powered Analysis** - Send element context and prompts to Kiro's AI
-- 🔗 **Seamless Integration** - Direct communication bridge with Kiro IDE
-- 📝 **Context-Aware Prompts** - Include element details, page context, and custom instructions
+## ✨ Features
 
-## 🚀 Quick Setup
+### 🌐 Cross-Origin Application Support
+- **Works with any web application** - React, Vue, Angular, vanilla HTML
+- **Secure postMessage communication** for cross-origin element selection
+- **No CORS issues** - Tool communicates safely across different origins
+- **Lightweight integration** - Single script inclusion
 
-1. **Copy this entire folder** to your project root
-2. **Install dependencies**: `npm install` (in the bundle folder)
-3. **Configure MCP**: Add the server to your `.kiro/settings/mcp.json`
-4. **Start the servers**: Run `npm run start`
-5. **Open the tool**: Navigate to `http://localhost:5174/ai-dev-tool`
+### 🎯 Advanced Element Selection
+- **Visual element inspection** with hover and selection highlights
+- **Persistent selection borders** that scroll with content
+- **Smart floating prompt** positioned perfectly below selected elements
+- **Comprehensive element data** - tagName, classes, content, dimensions
 
-## 📁 What's Included
+### 🤖 AI Integration
+- **Direct Kiro AI communication** via MCP (Model Context Protocol)
+- **Element context awareness** - AI receives full element information
+- **Natural language prompts** for element modifications
+- **Real-time style editing** with visual feedback
 
-```
-kiro-ai-visual-dev-tool/
-├── package.json                    # Dependencies and scripts
-├── mcp-server.mjs                  # MCP server for Kiro integration
-├── web-server.mjs                  # Web server for the AI tool
-├── public/
-│   ├── index.html                  # Main AI Visual Dev Tool interface
-│   ├── mcp-test.html              # Browser message testing page
-│   └── assets/                     # CSS, JS, and other assets
-├── .kiro/
-│   ├── browser-messages/           # Message storage
-│   │   ├── incoming.json          # Incoming messages from browser
-│   │   └── browser-messages.json  # Message history log
-│   └── hooks/
-│       └── browser-message-responder.kiro.hook  # Manual message processor
-└── scripts/
-    ├── setup.mjs                   # One-time setup script
-    └── start.mjs                   # Start all services
+## 🚀 Quick Start
+
+### For External Applications (React, Vue, etc.)
+
+1. **Add the inspector script** to your application's HTML:
+```html
+<script src="/kiro-inspector.js"></script>
 ```
 
-## ⚙️ Configuration
+2. **Start the AI Visual Dev Tool** (runs on http://localhost:5174)
 
-### MCP Server Configuration
+3. **Select your application** from the dropdown (e.g., http://localhost:5173)
 
-Add this to your project's `.kiro/settings/mcp.json`:
+4. **Click "Start Inspector"** and begin selecting elements!
 
-```json
-{
-  "mcpServers": {
-    "ai-visual-dev-tool": {
-      "command": "node",
-      "args": ["kiro-ai-visual-dev-tool/mcp-server.mjs"],
-      "env": {},
-      "disabled": false,
-      "autoApprove": ["get-latest-browser-message", "send-browser-message"]
-    }
-  }
-}
-```
+### For Same-Origin Applications
 
-## 🎯 Usage
+The tool works automatically with same-origin content - no additional setup required.
 
-### 1. AI Visual Dev Tool (Main Interface)
-- Open `http://localhost:5174/ai-dev-tool`
-- Load any webpage in the built-in browser
-- Use the visual inspector to select elements
-- Write AI prompts with full element context
-- Send to Kiro for AI-powered analysis and suggestions
+## 📋 Installation
 
-### 2. Element Analysis Workflow
-1. **Load Page** - Enter any URL to analyze
-2. **Start Inspector** - Click to enable element selection
-3. **Select Element** - Click any element to capture its context
-4. **Write Prompt** - Describe what you want to do with the element
-5. **Send to Kiro** - AI processes with full context
-
-### 3. Message Testing
-- Open `http://localhost:5174/mcp-test`
-- Send test messages directly to Kiro
-- Verify the communication pipeline
-
-### 4. Kiro Integration
-- Messages appear in `.kiro/browser-messages/incoming.json`
-- Manually trigger the "Browser Message Responder" hook in Kiro
-- Messages appear in Kiro chat with full element context and metadata
-
-## 🔧 Commands
-
+### Option 1: Clone Repository
 ```bash
-# Install dependencies
-npm install
-
-# Start all services (MCP server + Web server)
-npm run start
-
-# Start only MCP server
-npm run start:mcp
-
-# Start only web server  
-npm run start:web
-
-# Run setup (copies hooks and creates directories)
-npm run setup
+git clone https://github.com/your-username/kiro-ai-visual-dev-tool.git
+cd kiro-ai-visual-dev-tool
 ```
 
-## 🏗️ Architecture
+### Option 2: Download Release
+Download the latest release and extract to your project.
 
-```
-Browser AI Tool → HTTP POST → MCP Server → .kiro/browser-messages/incoming.json
-                                              ↓
-                                         Manual Hook Trigger
-                                              ↓
-                                         Kiro Chat Interface
-```
+## 🔧 Setup
 
-## 📋 Requirements
+1. **Place the tool** in your project directory
+2. **Copy `kiro-inspector.js`** to your application's public folder
+3. **Include the script** in your application's HTML
+4. **Start your application** (e.g., React dev server on localhost:5173)
+5. **Open the tool** by navigating to the `ai-dev-tool.html` file
 
-- Node.js 18+
-- Kiro IDE with MCP support
-- Project with `.kiro/` directory
+## 📖 Usage Guide
 
-## 🔍 Troubleshooting
+### Starting Inspection
 
-### Messages not appearing in Kiro?
-1. Check MCP server is running: `http://localhost:3001/status`
-2. Verify MCP configuration in `.kiro/settings/mcp.json`
-3. Manually trigger the Browser Message Responder hook
+1. **Open the AI Visual Dev Tool** in your browser
+2. **Select your application URL** from the dropdown
+3. **Click "Start Inspector"** - the button will turn red and show "Stop Inspector"
+4. **Hover over elements** to see blue highlighting
+5. **Click elements** to select them and open the floating prompt
 
-### Web tool not loading?
-1. Check web server is running: `http://localhost:5174`
-2. Verify no port conflicts
-3. Check browser console for errors
+### Using the Floating Prompt
 
-### MCP server connection issues?
-1. Restart Kiro IDE
-2. Check MCP server logs
-3. Verify file permissions in `.kiro/` directory
+When you select an element, a floating prompt appears with:
 
-## 🎨 Customization
+- **Element preview** - Shows tag, classes, and content
+- **Quick prompt input** - Ask for changes in natural language
+- **Style controls** - Visual editors for spacing, colors, typography
+- **CSS class editor** - For utility frameworks like Tailwind CSS
 
-### Adding Custom Tools
-Edit `mcp-server.mjs` to add new MCP tools:
+### AI Integration
+
+The tool integrates with Kiro AI through MCP:
+
+1. **Send prompts** directly to Kiro with full element context
+2. **Receive AI suggestions** for improvements and modifications
+3. **Apply changes** with AI assistance
+
+## 🎨 Visual Feedback
+
+### Highlight Types
+- **Hover Highlight** - Blue inset shadow when hovering over elements
+- **Selection Highlight** - Blue outline border for selected elements
+- **Persistent Selection** - Selected element stays highlighted when moving mouse
+
+### Floating Prompt Positioning
+- **8px spacing** below selected elements
+- **Horizontally centered** to the selected element
+- **Smart positioning** - moves above element only when necessary
+- **Scrolls naturally** with page content
+
+## 🔧 Technical Details
+
+### Cross-Origin Communication
+The tool uses `postMessage` API for secure cross-origin communication:
 
 ```javascript
-{
-  name: 'your-custom-tool',
-  description: 'Your tool description',
-  inputSchema: { /* your schema */ }
-}
+// Tool sends inspector state to iframe
+iframe.contentWindow.postMessage({
+    type: 'SET_INSPECTOR_STATE',
+    isInspecting: true
+}, '*');
+
+// Iframe sends element data back to tool
+window.parent.postMessage({
+    type: 'ELEMENT_SELECTED',
+    element: elementData
+}, 'http://localhost:5174');
 ```
 
-### Styling the Interface
-Edit `public/assets/style.css` to customize the appearance.
+### Inspector Script (`kiro-inspector.js`)
+Lightweight script that:
+- Listens for inspector state changes
+- Handles element selection and highlighting
+- Sends element data to the parent tool
+- Manages visual feedback (hover/selection highlights)
 
-### Message Processing
-Modify `.kiro/hooks/browser-message-responder.kiro.hook` to change how messages are processed.
+### Coordinate System
+- **Cross-origin elements** - Uses iframe viewport coordinates directly
+- **Same-origin elements** - Adjusts coordinates for iframe positioning
+- **Boundary detection** - Smart positioning within visible area
 
-## 📦 Deployment
+## 🧪 Testing
 
-This tool is designed for local development. For production use:
+### Test with React Application
 
-1. Change ports in configuration
-2. Add authentication if needed
-3. Configure CORS for your domain
-4. Set up proper logging
+1. **Start React app** on http://localhost:5173
+2. **Include inspector script** in `public/index.html`
+3. **Open AI tool** and select React app from dropdown
+4. **Test element selection** and floating prompt positioning
+
+### Test Cross-Origin Functionality
+
+1. **Verify postMessage communication** in browser console
+2. **Test element highlighting** (hover vs selection)
+3. **Confirm floating prompt positioning** (8px below, centered)
+4. **Test inspector state management** (start/stop)
+
+## 🐛 Troubleshooting
+
+### Inspector Not Working
+- **Check console** for postMessage communication logs
+- **Verify script inclusion** - `kiro-inspector.js` must be loaded
+- **Confirm origin** - Tool runs on http://localhost:5174
+
+### Positioning Issues
+- **Check coordinate logs** in browser console
+- **Verify iframe dimensions** and positioning
+- **Test with different element types** and positions
+
+### Highlighting Problems
+- **Hover highlights** use `box-shadow` (temporary)
+- **Selection highlights** use `outline` (persistent)
+- **Check for CSS conflicts** with existing styles
 
 ## 🤝 Contributing
 
-This is a self-contained bundle. To contribute:
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly with cross-origin applications
+5. Submit a pull request
 
-1. Make changes to the bundle
-2. Test with multiple projects
-3. Update documentation
-4. Create new bundle version
+## 📄 License
+
+MIT License - see LICENSE file for details
+
+## 🙏 Acknowledgments
+
+- Built for Kiro AI development workflows
+- Inspired by browser developer tools
+- Designed for modern web application development
 
 ---
 
-**Version**: 1.0.0  
-**Compatible with**: Kiro IDE 0.1.25+  
-**License**: MIT
+**Ready to supercharge your development workflow with AI-assisted visual editing!** 🚀

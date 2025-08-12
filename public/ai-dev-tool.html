@@ -1779,7 +1779,7 @@ Examples:
                 }
 
                 let url;
-                
+
                 // Check if it's already a full URL (starts with http:// or https://)
                 if (selectedPath.startsWith('http://') || selectedPath.startsWith('https://')) {
                     url = selectedPath;
@@ -1808,10 +1808,72 @@ Examples:
                     // Try to access iframe content (will fail for cross-origin)
                     const iframeDoc = this.iframe.contentDocument || this.iframe.contentWindow.document;
                     this.setupElementInspection(iframeDoc);
+                    console.log('Direct iframe access successful');
                 } catch (error) {
-                    console.warn('Cross-origin iframe detected. Limited functionality available.');
-                    this.showCrossOriginWarning();
+                    console.log('Cross-origin detected - setting up postMessage inspection');
+                    this.setupPostMessageInspection();
                 }
+            }
+
+            setupPostMessageInspection() {
+                console.log('Setting up postMessage inspection for cross-origin iframe');
+
+                // Listen for messages from the iframe
+                window.addEventListener('message', (event) => {
+                    // Filter out React DevTools and other noise
+                    if (event.data.source === 'react-devtools-content-script' ||
+                        event.data.source === 'react-devtools-bridge' ||
+                        !event.data.type) {
+                        return;
+                    }
+
+                    console.log('Received inspection message:', event.data);
+
+                    if (event.data.type === 'ELEMENT_SELECTED') {
+                        this.handleCrossOriginElementSelected(event.data.element);
+                    } else if (event.data.type === 'ELEMENT_HOVERED') {
+                        this.handleCrossOriginElementHovered(event.data.element);
+                    }
+                });
+
+                // Inject inspection script into the iframe
+                this.injectInspectionScript();
+
+                // Show helpful message
+                const selectedElement = document.getElementById('selected-element');
+                selectedElement.innerHTML = `
+                    <div class="element-tag">🌐 External Page Loaded</div>
+                    <div class="element-text">External page loaded successfully. Click "Start Inspector" to begin element selection.</div>
+                `;
+            }
+
+            injectInspectionScript() {
+                // No need to inject script - the React app now includes kiro-inspector.js
+                console.log('Inspector script should be loaded by the React app via kiro-inspector.js');
+            }
+
+            handleCrossOriginElementSelected(elementData) {
+                console.log('Cross-origin element selected:', elementData);
+
+                // Create a mock element for the original selectElement function
+                const mockElement = {
+                    tagName: elementData.tagName,
+                    className: elementData.className,
+                    id: elementData.id,
+                    textContent: elementData.textContent,
+                    outerHTML: elementData.outerHTML,
+                    getBoundingClientRect: () => elementData.rect || {
+                        top: 100, left: 100, width: 200, height: 50
+                    }
+                };
+
+                // Use the original selectElement logic
+                this.selectElement(mockElement);
+            }
+
+            handleCrossOriginElementHovered(elementData) {
+                // Just log for now - highlighting is handled in the iframe
+                console.log('Cross-origin element hovered:', elementData.tagName);
             }
 
             showCrossOriginWarning() {
@@ -1872,6 +1934,15 @@ Examples:
                     this.clearHighlight();
                     this.hideFloatingPrompt();
                     console.log('Inspector stopped');
+                }
+
+                // Communicate inspector state to cross-origin iframe
+                if (this.iframe && this.iframe.contentWindow) {
+                    this.iframe.contentWindow.postMessage({
+                        type: 'SET_INSPECTOR_STATE',
+                        isInspecting: this.isInspecting
+                    }, '*');
+                    console.log('Sent inspector state to iframe:', this.isInspecting);
                 }
             }
 
@@ -1942,20 +2013,24 @@ Examples:
                 // Clear any existing highlight first
                 this.clearHighlight();
 
-                // Get element position relative to the iframe document
-                const rect = element.getBoundingClientRect();
+                // For cross-origin elements, we can't create a highlight in the parent
+                // The highlighting is handled by the iframe itself via the inspector script
+                if (!element.ownerDocument) {
+                    console.log('Cross-origin element - highlight handled by iframe');
+                    return;
+                }
 
-                // Get the iframe container position
-                const iframeContainer = this.iframe.parentElement;
-                const containerRect = iframeContainer.getBoundingClientRect();
+                // For same-origin elements, create highlight in overlay
+                const rect = element.getBoundingClientRect();
+                const iframeRect = this.iframe.getBoundingClientRect();
 
                 const highlight = document.createElement('div');
                 highlight.className = 'highlight persistent-highlight';
                 highlight.style.position = 'absolute';
 
-                // Position relative to the iframe container (overlay parent)
-                const left = rect.left;
-                const top = rect.top;
+                // Adjust coordinates for iframe position
+                const left = rect.left + iframeRect.left;
+                const top = rect.top + iframeRect.top;
 
                 highlight.style.left = left + 'px';
                 highlight.style.top = top + 'px';
@@ -2024,34 +2099,37 @@ Examples:
                 const classes = element.className ? `.${element.className.split(' ').join('.')}` : '';
                 const text = element.textContent?.trim().substring(0, 50) || '';
 
-                // Get computed styles for margin and padding
-                const computedStyles = window.getComputedStyle ?
-                    window.getComputedStyle(element) :
-                    element.ownerDocument.defaultView.getComputedStyle(element);
+                // Check if this is a cross-origin element (mock element)
+                const isCrossOrigin = !element.ownerDocument;
+                let computedStyles = null;
 
-                // Extract margin values
-                const marginTop = computedStyles.marginTop;
-                const marginRight = computedStyles.marginRight;
-                const marginBottom = computedStyles.marginBottom;
-                const marginLeft = computedStyles.marginLeft;
+                if (!isCrossOrigin) {
+                    // Get computed styles for same-origin elements
+                    computedStyles = window.getComputedStyle ?
+                        window.getComputedStyle(element) :
+                        element.ownerDocument.defaultView.getComputedStyle(element);
+                }
 
-                // Extract padding values
-                const paddingTop = computedStyles.paddingTop;
-                const paddingRight = computedStyles.paddingRight;
-                const paddingBottom = computedStyles.paddingBottom;
-                const paddingLeft = computedStyles.paddingLeft;
+                // Extract values (use defaults for cross-origin elements)
+                const marginTop = computedStyles?.marginTop || '0px';
+                const marginRight = computedStyles?.marginRight || '0px';
+                const marginBottom = computedStyles?.marginBottom || '0px';
+                const marginLeft = computedStyles?.marginLeft || '0px';
 
-                // Extract background and border-radius values
-                const backgroundColor = computedStyles.backgroundColor;
-                const backgroundImage = computedStyles.backgroundImage;
-                const borderRadius = computedStyles.borderRadius;
+                const paddingTop = computedStyles?.paddingTop || '0px';
+                const paddingRight = computedStyles?.paddingRight || '0px';
+                const paddingBottom = computedStyles?.paddingBottom || '0px';
+                const paddingLeft = computedStyles?.paddingLeft || '0px';
 
-                // Extract text properties
-                const fontSize = computedStyles.fontSize;
-                const fontWeight = computedStyles.fontWeight;
-                const color = computedStyles.color;
-                const textAlign = computedStyles.textAlign;
-                const fontFamily = computedStyles.fontFamily;
+                const backgroundColor = computedStyles?.backgroundColor || 'transparent';
+                const backgroundImage = computedStyles?.backgroundImage || 'none';
+                const borderRadius = computedStyles?.borderRadius || '0px';
+
+                const fontSize = computedStyles?.fontSize || '16px';
+                const fontWeight = computedStyles?.fontWeight || '400';
+                const color = computedStyles?.color || 'rgb(0, 0, 0)';
+                const textAlign = computedStyles?.textAlign || 'start';
+                const fontFamily = computedStyles?.fontFamily || 'inherit';
 
                 // Check if any margin values are non-zero
                 const hasMargin = marginTop !== '0px' || marginRight !== '0px' ||
@@ -2296,34 +2374,68 @@ Examples:
                 }
 
                 // Position the prompt below the highlighted element
-                // Since the element rect is relative to the iframe document, we can use it directly
                 const promptWidth = 400;
                 const promptHeight = 300;
 
-                // Get iframe container dimensions for boundary checking
+                // Get iframe and container dimensions for positioning
+                const iframeRect = this.iframe.getBoundingClientRect();
                 const iframeContainer = this.iframe.parentElement;
                 const containerRect = iframeContainer.getBoundingClientRect();
 
-                // Center horizontally relative to the element, but keep within iframe bounds
-                let left = rect.left + (rect.width / 2) - (promptWidth / 2);
+                // Debug logging
+                console.log('Positioning floating prompt:');
+                console.log('- Element tag:', element.tagName, 'class:', element.className);
+                console.log('- isCrossOrigin:', isCrossOrigin);
+                console.log('- rect:', rect);
+                console.log('- iframeRect:', iframeRect);
 
-                // Position below the element with some padding
-                let top = rect.bottom + 15;
+                // The overlay is positioned absolute with top:0, left:0 relative to iframe-container
+                // The iframe is also positioned within the same iframe-container
+                // So iframe coordinates should work directly in the overlay
 
-                // Keep prompt within iframe container bounds
-                const maxLeft = containerRect.width - promptWidth - 10;
-                const maxTop = containerRect.height - promptHeight - 10;
+                let finalLeft, finalTop, finalBottom;
 
+                // Always use iframe coordinates directly since overlay matches iframe positioning
+                finalLeft = rect.left;
+                finalTop = rect.top;
+                finalBottom = rect.bottom;
+
+                // Center horizontally relative to the element
+                let left = finalLeft + (rect.width / 2) - (promptWidth / 2);
+
+                // Position exactly 8px below the element's bottom border
+                let top = finalBottom + 8;
+
+                console.log('- finalLeft:', finalLeft, 'finalTop:', finalTop, 'finalBottom:', finalBottom);
+                console.log('- calculated left:', left, 'top:', top);
+
+                // Keep prompt within reasonable bounds, but be more permissive
+                // The iframe content might be scrollable, so don't be too restrictive
+                const iframeWidth = this.iframe.offsetWidth;
+                const iframeHeight = this.iframe.offsetHeight;
+
+                console.log('- iframeWidth:', iframeWidth, 'iframeHeight:', iframeHeight);
+
+                // Horizontal bounds - keep within iframe width
                 if (left < 10) left = 10;
-                if (left > maxLeft) left = maxLeft;
+                if (left > iframeWidth - promptWidth - 10) left = iframeWidth - promptWidth - 10;
 
-                // If there's not enough space below, position above the element
-                if (top > maxTop) {
-                    top = rect.top - promptHeight - 15;
+                // Vertical bounds - only move above if the prompt would be completely outside viewport
+                // Allow the prompt to extend beyond the current viewport since content might be scrollable
+                const wouldBeCompletelyOutside = top > iframeHeight + 100; // Give 100px buffer
+
+                if (wouldBeCompletelyOutside) {
+                    console.log('- Prompt would be completely outside viewport, positioning above');
+                    top = finalTop - promptHeight - 8;
+
+                    // If positioning above would put it too high, just position it at a reasonable spot
+                    if (top < 10) {
+                        console.log('- Positioning above would be too high, using fallback position');
+                        top = Math.max(10, finalTop - 50); // Position 50px above element or at top
+                    }
+                } else {
+                    console.log('- Prompt position is acceptable, keeping below element');
                 }
-
-                // If still not enough space above, position at the top
-                if (top < 10) top = 10;
 
                 prompt.style.left = left + 'px';
                 prompt.style.top = top + 'px';
